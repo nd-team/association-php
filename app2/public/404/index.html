@@ -1,0 +1,401 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+<link rel="stylesheet" href="../../public/404/css/main.css" type="text/css" media="screen, projection" /> <!-- main stylesheet -->
+<link rel="stylesheet" type="text/css" media="all" href="../../public/404/css/tipsy.css" /> <!-- Tipsy implementation -->
+
+<!--[if lt IE 9]>
+	<link rel="stylesheet" type="text/css" href="css/ie8.css" />
+<![endif]-->
+
+<script type="text/javascript" src="../../public/404/scripts/jquery-1.7.2.min.js"></script> <!-- uiToTop implementation -->
+<script type="text/javascript" src="../../public/404/scripts/custom-scripts.js"></script>
+<script type="text/javascript" src="../../public/404/scripts/jquery.tipsy.js"></script> <!-- Tipsy -->
+
+<script type="text/javascript">
+
+$(document).ready(function(){
+			
+	universalPreloader();
+						   
+});
+
+$(window).load(function(){
+
+	//remove Universal Preloader
+	universalPreloaderRemove();
+	
+	rotate();
+    dogRun();
+	dogTalk();
+	
+	//Tipsy implementation
+	$('.with-tooltip').tipsy({gravity: $.fn.tipsy.autoNS});
+						   
+});
+
+</script>
+<style>
+@charset "utf-8";
+/* CSS Document */
+
+/* === Custom font === */
+
+@font-face {
+    font-family: 'SingleSleeveRegular';
+    src: url('../../public/404/font/sing-webfont.eot');
+    src: url('../../public/404/font/sing-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../../public/404/font/sing-webfont.woff') format('woff'),
+         url('../../public/404/font/sing-webfont.ttf') format('truetype'),
+         url('../../public/404/font/sing-webfont.svg#SingleSleeveRegular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+/* === General stuff === */
+
+html, body{
+	
+	height:100%;
+	background:#186aa9 url(../../public/404/images/sky-background.png) top repeat-x;	
+	overflow:hidden;
+	padding:0;
+	margin:0;
+	font-family:Arial, Helvetica, sans-serif;
+	
+}
+
+a{
+	
+	color:#3680b1;	
+	
+}
+
+img, a img{
+	
+	border:0px none;	
+	outline:none;
+	
+}
+
+/* === Preloader === */
+
+
+
+#universal-preloader>.preloader{
+	
+	width:24px;
+	height:24px;
+	position:absolute;
+	top:50%;
+	left:50%;
+	text-align:center;
+	
+}
+
+.universal-preloader-preloader{
+	
+	position:absolute; 
+	top:0px; 
+	left:0px;	
+	
+}
+
+/* === Main Section === */
+
+#wrapper{
+	
+	width:980px;
+	margin:0px auto;
+	position:relative;
+	height:100%;
+	background:url(../../public/404/images/sky-shine.jpg) top left no-repeat;
+	
+}
+
+h1.not-found-text{
+	
+	font-size:50px;
+	color:#fff;
+	font-family:"SingleSleeveRegular", cursive;
+	letter-spacing:2px;
+	margin-bottom:20px;
+	
+}
+
+div.not-found-text{
+	
+	position:absolute;
+	top:35px;
+	right:0px;
+	width:430px;
+	
+}
+
+div.graphic{
+	
+	position:absolute;
+	top:80px;
+	left:0px;
+	background:url(../../public/404/images/404.png) top left no-repeat;
+	width:494px;
+	height:331px;
+	
+}
+
+div.planet{
+
+	position:absolute;
+	bottom:-1100px;
+	margin:0px auto;
+	width:980px;
+	background:url(../../public/404/images/planet.png) center no-repeat;
+	height:1920px;
+	z-index:0;
+	
+}
+
+div.dog-wrapper{
+	
+	position:absolute;
+	bottom:300px;
+	left:440px;
+	
+}
+
+div.dog{
+	
+	position:absolute;
+	bottom:0px;
+	left:0px;
+	width:80px;
+	height:80px;
+	z-index:999;
+	background:url(../../public/404/images/dog.png) 0px 0px no-repeat;
+	
+}
+
+div.search{
+	
+	position:absolute;
+	top:145px;
+	right:0px;
+	width:340px;
+	background:#eeeeee;
+	box-shadow:1px 1px 0 #ffffff inset, 5px 5px 0px #3680b1;
+	color:#555555;
+	font-size:14px;
+	text-shadow:1px 1px 0 #ffffff;
+	border-radius:30px;
+	padding:10px;
+	z-index:999;
+	
+}
+
+div.search input[type=submit]:hover{
+	
+	background:#ffffff url(../../public/404/images/search.png) center center no-repeat;	
+	cursor:pointer;
+	
+}
+
+div.search input[type=submit]{
+	
+	box-shadow:1px 1px 0 #ffffff inset, 5px 5px 0px #3680b1;
+	background:#eeeeee url(../../public/404/images/search.png) center center no-repeat;
+	border-radius:50px;
+	position:absolute;
+	top:0px;
+	right:380px;
+	width:50px;
+	height:40px;
+	border:none;
+	
+	
+}
+
+div.search input[type=text]{
+	
+	padding:0px 10px;
+	border:0px none;
+	background:none;
+	color:#999999;
+	width:300px;
+	height:20px;
+	
+}
+
+div.top-menu{
+	
+	position:absolute;
+	top:200px;
+	right:0px;
+	color:#ffffff;
+	z-index:998;
+	
+}
+
+div.top-menu a{
+	
+	text-decoration:none;
+	color:#eeeeee;
+	margin:0px 5px;
+	font-size:12px;
+	
+}
+
+div.top-menu a:hover{
+	
+	color:#abd7fa;	
+	
+}
+
+div.dog-bubble{
+	
+	font-size:14px;
+	line-height:1.5;
+	font-style:italic;
+	height:179px;
+	width:246px;
+	background:url(../../public/404/images/bubble.png) top center no-repeat;
+	padding:20px 0px;
+	position:absolute;
+	bottom:0px;
+	left:30px;
+	z-index:999;
+	opacity:0;
+	color:#555555;
+	font-size:14px;
+	text-shadow:1px 1px 0 #ffffff;
+	
+}
+
+div.dog-bubble>p{
+	
+	text-align:center;
+	padding:0px 35px;	
+	
+}
+
+div.bubble-options{
+
+	opacity:0;
+	visibility:hidden;
+	display:none;
+	
+}
+
+.tipsy { padding: 5px; font-size: 10px; position: absolute; z-index: 9999999999; }
+  .tipsy-inner { padding: 5px 8px 4px 8px; background-color: black; color: white; max-width: 200px; text-align: center; }
+  .tipsy-inner { border-radius: 3px; -moz-border-radius:3px; -webkit-border-radius:3px; }
+  .tipsy-arrow { position: absolute; background: url('../../public/404/images/tipsy.gif') no-repeat top left; width: 9px; height: 5px; }
+  .tipsy-n .tipsy-arrow { top: 0; left: 50%; margin-left: -4px; }
+    .tipsy-nw .tipsy-arrow { top: 0; left: 10px; }
+    .tipsy-ne .tipsy-arrow { top: 0; right: 10px; }
+  .tipsy-s .tipsy-arrow { bottom: 0; left: 50%; margin-left: -4px; background-position: bottom left; }
+    .tipsy-sw .tipsy-arrow { bottom: 0; left: 10px; background-position: bottom left; }
+    .tipsy-se .tipsy-arrow { bottom: 0; right: 10px; background-position: bottom left; }
+  .tipsy-e .tipsy-arrow { top: 50%; margin-top: -4px; right: 0; width: 5px; height: 9px; background-position: top right; }
+  .tipsy-w .tipsy-arrow { top: 50%; margin-top: -4px; left: 0; width: 5px; height: 9px; }
+</style>
+
+<title>404 - Not found</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head>
+
+<body>
+
+<!-- Universal preloader -->
+<div id="universal-preloader">
+    <div class="preloader">
+        <img src="../../public/404/images/universal-preloader.gif" alt="universal-preloader" class="universal-preloader-preloader" />
+    </div>
+</div>
+<!-- Universal preloader -->
+
+<div id="wrapper">
+<!-- 404 graphic -->
+	<div class="graphic"></div>
+<!-- 404 graphic -->
+<!-- Not found text -->
+	<div class="not-found-text">
+    	<h1 class="not-found-text">文件未找到!</h1>
+    </div>
+<!-- Not found text -->
+
+<!-- search form -->
+
+<!-- search form -->
+
+<!-- top menu -->
+
+<div class="top-menu">
+	<a href="/admin/index/index" class="with-tooltip" title="Return to the home page">首页</a> 
+	<div style="position:absolute;right:-100px;height:200px;width:300px;overflow:auto;">
+		<?php
+			print_r($a);
+		?>
+	</div>
+</div>
+<!-- top menu -->
+
+<div class="dog-wrapper">
+<!-- dog running -->
+	<div class="dog"></div>
+<!-- dog running -->
+	
+<!-- dog bubble talking -->
+	<div class="dog-bubble">
+    	
+    </div>
+    
+    <!-- The dog bubble rotates these -->
+    <div class="bubble-options">
+    	<p class="dog-bubble">
+        	你输了，芽？别担心，我是一个很好的指导！
+        </p>
+    	<p class="dog-bubble">
+	        <br />
+        	 汪! 汪!
+        </p>
+        <p class="dog-bubble">
+        	<br />
+        	不用担心！我就可以了！
+        </p>
+        <p class="dog-bubble">
+        	我希望我有一个饼干<br /><img style="margin-top:8px" src="../../public/404/images/cookie.png" alt="cookie" />
+        </p>
+        <p class="dog-bubble">
+        	<br />
+        	吉兹！这是很烦人！
+        </p>
+        <p class="dog-bubble">
+        	<br />
+        	我在越来越接近？
+        </p>
+        <p class="dog-bubble">
+        	还是我只是要在圈子？罗...
+        </p>
+        <p class="dog-bubble">
+        	<br />
+            OK，我现在正式失去了...
+        </p>
+        <p class="dog-bubble">
+        	I think I saw a <br /><img style="margin-top:8px" src="../../public/404/images/cat.png" alt="cat" />
+        </p>
+        <p class="dog-bubble">
+        	那么，我们应该在寻找，到底？ @_@
+        </p>
+    </div>
+    <!-- The dog bubble rotates these -->
+<!-- dog bubble talking -->
+</div>
+
+<!-- planet at the bottom -->
+	<div class="planet"></div>
+<!-- planet at the bottom -->
+</div>
+
+</body>
+</html>
