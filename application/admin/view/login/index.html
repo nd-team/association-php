@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<title>登录</title>
+	{css href="/public/effect/bootstrap3/css/bootstrap.css" /}
+	<!-- {css href="/bootstrap3/css/bootstrap.min.css" /} -->
+	{css href="/public/effect/font-awesome-4.6/css/font-awesome.min.css" /}
+	{css href="/public/effect/css/admin/login.css" /}
+	{js href="/public/effect/plugins/jquery-3.1.0.min.js" /}
+</head>
+<body>
+<div id="login-wrapper">
+    <div class="login-main">
+        <div class="login-logo"></div>
+        <div class="login-form">
+            <div class="login-form-header">
+                <p class="">登 录</p>
+            </div>
+            <div class="form-horizontal" role="form">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">账 号</label>
+                    <div class="col-sm-8">
+                        <input type="mobile" class="form-control" id="mobile" placeholder="Mobile">
+                        <span class="glyphicon glyphicon-user form-control-feedback" style="right: 14px;"></span>
+                    </div>
+                </div>				 
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">密 码</label>
+                    <div class="col-sm-8">
+                        <input type="password" class="form-control" id="password" placeholder="Password">
+                        <span class="glyphicon glyphicon-lock form-control-feedback" style="right: 14px;"></span>
+                    </div>
+                </div>
+				<div class="form-group">
+					<label for="inputVerify" class="col-sm-3 control-label">验证码</label>
+					<div class="col-sm-8">
+						<input class="form-control" id="inputVerify"  placeholder="验证码" type="text"
+                           data-error="验证码错误" required>
+						<img class="verifyimg reloadverify" src="{:captcha_src()}" alt="">				
+					</div>
+				</div>
+                <div class="form-group">
+                    <div class="col-sm-offset-3 col-sm-8">
+                        <div class="msgerr msg-info"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-9">
+                        <button type="submit" class="btn btn-primary btn-lg btn-block">登 录</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+	$(document).ready(function () {
+		if($("#mobile") == ''){
+			$("#mobile").focus();
+		}else{
+			$("#password").focus();
+		}
+		var data = {};
+		var msgerr = $(".msgerr")
+		$('button').click(function () {
+			data.admin_name = $("#mobile").val()
+			data.password = $("#password").val()
+			data.captcha =$("#inputVerify").val()
+			if(data.admin_name == ''){
+				msgerr.addClass('msg-info').html("请输入账号！")
+			}else if(data.password == ''){
+				msgerr.addClass('msg-info').html("请输入密码！")
+			}else if(data.captcha == ''){
+				msgerr.addClass('msg-info').html("请输入验证码！")
+			}else{
+				$.ajax({
+					url: '/public/admin/Login/doLogin',
+					type: 'post',
+					data: data,
+					dataType: 'json',
+					success:function (data) {
+					//alert(JSON.stringify(data));return false;
+						if(data.code == 1){
+							msgerr.addClass('msg-success').html('登录中···');
+							setTimeout(function() {
+								msgerr.addClass('msg-success').html(data.data);
+				                window.location.href = data.url;
+				            }, parseInt(data.wait) * 500)
+						}else if(data.code == 0){
+							msgerr.html(data.msg);
+							var verifyimg = $(".verifyimg").attr("src");
+							if( verifyimg.indexOf('?')>0){
+								$(".verifyimg").attr("src", verifyimg+'&random='+Math.random());
+							}else{
+								$(".verifyimg").attr("src", verifyimg.replace(/\?.*$/,'')+'?'+Math.random());
+							}
+						}
+					},
+					error:function () {
+						msgerr.addClass('msg-error').html("网络错误，请稍后再试！");
+					}
+				})
+			}
+		})
+	});
+	$(function(){
+        // 刷新验证码
+        var verifyimg = $(".verifyimg").attr("src");
+        $(".reloadverify").css("cursor","pointer").click(function(){
+            if( verifyimg.indexOf('?')>0){
+                $(".verifyimg").attr("src", verifyimg+'&random='+Math.random());
+            }else{
+                $(".verifyimg").attr("src", verifyimg.replace(/\?.*$/,'')+'?'+Math.random());
+            }
+        });
+    });
+</script>
+</body>
+</html>
+
+	

@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>用户1</title>
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+	{css href="/public/webchat/bootstrap.min.css" /}
+	{css href="/public/webchat/bootstrap-theme.min.css" /}
+	{css href="/public/webchat/css/font-awesome.min.css" /}
+	{css href="/public/webchat/css/base.css" /}
+	{css href="/public/effect/assets/css/font-awesome.min.css" rel="stylesheet"}
+	
+	
+</head>
+<body>
+
+<button class="bjy-rong-chat" targetid="13025304562" avatar="/public/webchat/avatar/user2.jpg" targetname="13025304562">13025304562</button>
+<button class="bjy-rong-chat" targetid="18819493903" avatar="/public/webchat/avatar/user2.jpg" targetname="18819493903">18819493903</button>
+<button class="bjy-rong-chat" targetid="18826238489" avatar="/public/webchat/avatar/user2.jpg" targetname="18826238489">18826238489</button>
+
+<!-- 聊天框开始 -->
+<div class="modal fade" id="bjy-chat-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="bjy-top">
+                <div class="bjy-t-myinfo">
+                    {$userinfo['nickname']}
+                    <img class="bjy-t-avatar" src="##">
+                </div>
+                <div class="bjy-t-title">
+                    <span class="bjy-tt-name"></span>
+                    <span class="bjy-tt-edu"></span>
+                    <div class="bjy-tt-close" data-dismiss="modal" aria-hidden="true"></div>
+                </div>
+            </div>
+            <div class="bjy-chat bjy-emoji-out3">
+                <div class="bjy-friend-list"></div>
+                <div class="bjy-chat-box bjy-show-out">
+                    <div class="bjy-cb-history"></div>
+                    <div class="bjy-cb-middle " id="file_container">
+					
+                        <button type="button" class="bjy-emoji-ico bt">
+							 <span class=" icon-heart"></span>
+						</button>
+						<div class="file" id="file_pickfiles">
+							<input type="file" id="image_pickfiles"/>
+						</div>
+                        <div class="bjy-emoji-box">
+                            <div class="bjy-e-triangle" style="display:block;width:20px;height:20px;">
+                                <div style="display:block;position:absolute;left:10px;top:10px;width:0;height:0;border-style:solid;border-width:10px;border-color:transparent transparent #eee  transparent;"></div>
+                                <div style="display:block;position:absolute;left:10px;top:11px;;width:0;height:0;border-style:solid;border-width:10px;border-color:transparent transparent #fff transparent;"></div>
+                            </div>
+                            <div class="xb-h-10"></div>
+                            <ul class="nav nav-tabs">
+                                <li class="active bjy-emoji-category">
+                                    <a href="#bjy-face-11" data-toggle="tab">表情</a>
+                                </li>
+                                <li class="bjy-emoji-category">
+                                    <a href="#bjy-face-12" data-toggle="tab">动物</a>
+                                </li>
+                                <li class="bjy-emoji-category">
+                                    <a href="#bjy-face-13" data-toggle="tab">水果</a>
+                                </li>
+                                <li class="bjy-emoji-category">
+                                    <a href="#bjy-face-14" data-toggle="tab">国旗</a>
+                                </li>
+                                <li class="bjy-emoji-category">
+                                    <a href="#bjy-face-15" data-toggle="tab">键盘</a>
+                                </li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane fade bjy-emoji-imgs in active" id="bjy-face-11"></div><div class="tab-pane fade bjy-emoji-imgs" id="bjy-face-12"></div>
+                                <div class="tab-pane fade bjy-emoji-imgs" id="bjy-face-13"></div>
+                                <div class="tab-pane fade bjy-emoji-imgs" id="bjy-face-14"></div>
+                                <div class="tab-pane fade bjy-emoji-imgs" id="bjy-face-15"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bjy-cb-sendbox">
+                        <textarea class="bjy-emoji-textarea bjy-emoji-from3 bjy-cbs-content hide" name="content"></textarea>
+						<div class="container">
+							<div class="bjy-show-box bjy-emoji-box3 text" id="myDiv" contenteditable="true" ></div>
+						</div>
+                    </div>
+                    <ul class="bjy-cb-handle">
+                        <li class="bjy-cbh-close" data-dismiss="modal" aria-hidden="true">关闭</li>
+                        <li class="bjy-cbh-send" data-uid=''>发送</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 聊天框结束 -->
+
+<!-- 引入bootstrjs部分开始 -->
+
+{js href="/public/webchat/js/jquery-1.10.2.min.js" /}
+{js href="/public/webchat/bootstrap.min.js" /}
+<script>
+
+    var xbIsLogin=1,
+        rongUserInfoUrl="/home/index/user_info",
+        rongKey="{$appKey}",
+        rongToken="{$userinfo['token']}",
+        xbUserInfo = {
+            id: "{$userinfo['tu_id']}",
+            name: "{$userinfo['nickname']}",
+            avatar: "http://www.rongcloud.cn/images/logo.png"
+        };
+    // 下面的代码是用来测试的
+    $('#bjy-chat-modal').modal('show');
+    setTimeout(function(){
+        $('.bjy-fl-one').click();
+    },2000)
+	window.onload = function (){    
+		/*
+        var bigImg = document.createElement("img");     //创建一个img元素  
+        bigImg.src="http://www.baidu.com/img/baidu_sylogo1.gif";   //给img元素的src属性赋值  
+        //bigImg.width="320";  //320个像素 不用加px  
+        var myDiv = document.getElementById('myDiv'); //获得dom对象  
+        myDiv.appendChild(bigImg);      //为dom添加子元素img  
+		*/
+
+
+    };
+	$(function() {
+      /*思路：
+       *1.熟悉文件拖拽 目标元素 的四个事件,注意:ondragover、ondrop事件中阻止默认行为
+       *2.拖拽放置后，获取到文件对象集合：e.dataTransfer.files
+       *3.循环该集合中的每个文件对象，判断文件类型以及文件大小，是指定类型则进行相应的操作
+       *4.读取文件信息对象：new FileReader()，它有读取文件对象为DataUrl等方法：readAsDataURL(文件对象)、读取成功之后触发的事件：onload事件等，this.result为读取到的数据
+       *5.在FileReader对象中的几个事件中进行相应的逻辑处理
+       *
+       */
+ 
+      //必须将jq对象转换为js对象，调用原生方法
+      var oDiv = $(".container").get(0);
+      var oP = $(".text");
+      //进入
+      oDiv.ondragenter = function() {
+          oP.html('');
+        }
+        //移动，需要阻止默认行为，否则直接在本页面中显示文件
+      oDiv.ondragover = function(e) {
+ 
+          e.preventDefault();
+        }
+        //离开
+      oDiv.onleave = function() {
+          oP.html('请将图片文件拖拽至此区域！');
+        }
+        //拖拽放置，也需要阻止默认行为
+      oDiv.ondrop = function(e) {
+ 
+        e.preventDefault();
+        //获取拖拽过来的对象,文件对象集合
+        var fs = e.dataTransfer.files;
+        //若为表单域中的file标签选中的文件，则使用form[表单name].files[0]来获取文件对象集合
+        //打印长度
+        console.log(fs.length);
+        //循环多文件拖拽上传
+        for (var i = 0; i < fs.length; i++) {
+          //文件类型
+          var _type = fs[i].type;
+ 
+          console.log(_type);
+          //判断文件类型
+          if (_type.indexOf('image') != -1) {
+            //文件大小控制
+            console.log(fs[i].size);
+            //读取文件对象
+            var reader = new FileReader();
+            //读为DataUrl,无返回值
+            reader.readAsDataURL(fs[i]);
+            reader.onloadstart = function(e) {
+                //开始加载
+              }
+              // 这个事件在读取进行中定时触发
+            reader.onprogress = function(e) {
+ 
+              $("#total").html(e.total);
+            }
+ 
+            //当读取成功时触发，this.result为读取的文件数据
+            reader.onload = function() {
+                //文件数据
+                // console.log(this.result);
+                //添加文件预览
+                var oImg = $("<img style='width:100px;' src='' />");
+                oImg.attr("src", this.result);
+                $(oP).append(oImg); //oDiv转换为js对象调用方法
+              }
+              //无论成功与否都会触发
+            reader.onloadend = function() {
+              if (reader.error) {
+                console.log(reader.error);
+              } else {
+                //上传没有错误，ajax发送文件，上传二进制文件
+              }
+            }
+          } else {
+            alert('请上传图片文件！');
+          }
+        }
+ 
+      }
+    });
+</script>
+<script src="http://cdn.ronghub.com/RongIMLib-2.0.6.beta.min.js"></script>
+<!--<script src="http://cdn.ronghub.com/RongIMLib-2.2.4.min.js"></script>-->
+{js href="/public/webchat/js/config.js" /}
+{js href="/public/webchat/js/emoji-picker.js" /}
+{js href="/public/webchat/js/jquery.emojiarea.js" /}
+{js href="/public/webchat/js/RongEmoji-2.0.2.beta.min.js" /}
+{js href="/public/webchat/js/main.js" /}
+{js href="/public/webchat/js/base.js" /}
+<script>
+$(function(){
+    // 初始化emoji
+    window.emojiPicker = new EmojiPicker({
+        emojiable_selector: '[data-emojiable=true]',
+        assetsPath: '/public/webchat/images',
+        'iconSize': 20
+    });
+    window.emojiPicker.discover();
+     
+	
+	
+	
+    // 需要转emoji的选择器 表情选择、学霸秀、聊天框
+    var toEmoji=['.bjy-emoji-box','.lqk-cfont-one','.bjy-cbhl-content,.lqk-sshow-info'];
+    $.each(toEmoji, function(index, val) {
+        $.each($(val), function(k, v) {
+            var str=$(v).html();
+            var newStr=window.emojiPicker.unicodeToImage(str);
+            $(v).html(newStr);            
+        });
+ 
+    });
+    // 评论框内的图片转换为from中utf8
+    var imageDiv=['.bjy-emoji-box1','.bjy-emoji-box2','.bjy-emoji-box3'];
+    var emojiFrom=['.bjy-emoji-from1','.bjy-emoji-from2','.bjy-emoji-from3'];
+    $.each(imageDiv, function(index, val) {
+        $(val).blur(function(event) {
+            var str=emojiDeleteTag($(this).html());
+            $(emojiFrom[index]).val(str);
+        });
+    });
+ 
+    /**
+     * 将带有emoji图片的字符串转为utf8
+     * @param  {string} str 带emoji图片的字符串
+     * @return {string}     utf8字符串
+     */
+    function emojiDeleteTag(str){
+        var str=str.replace(/<img.*?src=\".*?\".*?style=\".*?\".*?alt=\"/g,'');
+        var str=str.replace(/<img.*?style=\'.*?\'.*?alt=\"/g,'');
+        var str=str.replace(/\".*?src=\".*?\">/g,'');
+        str=str.replace(/:">/g,':');
+        str=window.emojiPicker.colonToUnicode(str);
+        return str;
+    }
+    // 显示或隐藏表情框
+    $('.bjy-emoji-ico').click(function(event) {
+        var parentObj=$(this).parents('.bjy-show-out').eq(0);
+        parentObj.find('.bjy-emoji-box').toggleClass('show');
+        parentObj.find('.bjy-emoji-category').eq(0).click();
+    });
+    // 点击emoji分类；获取分类下的表情
+    $('.bjy-emoji-box').on('click', '.bjy-emoji-category', function(event) {
+        var indexNumber=$(this).index(),
+            thisEmojiConfig=Config.EmojiCategories[indexNumber],
+            thisHtml='',
+            colon='';
+        // 将colon格式的标签转为图片格式
+        $.each(thisEmojiConfig, function(index, val) {
+            colon +=':'+Config.Emoji[val][1][0]+':';
+            thisHtml=window.emojiPicker.colonToImage(colon);
+        });
+        // 将图片插入到div中
+        $(this).parents('.bjy-emoji-box').eq(0).find('.bjy-emoji-imgs').eq(indexNumber).html(thisHtml);
+    });
+    // 点击添加表情
+    $('body').on('click','.bjy-emoji-box img', function(event) {
+        var str=$(this).prop("outerHTML");
+        $(this).parents('.bjy-show-out').eq(0).find('.bjy-show-box').focus();
+        insertHtmlAtCaret(str);
+        // 选择表情后关闭表情选择框
+        $(this).parents('.bjy-show-out').eq(0).find('.bjy-emoji-box').removeClass('show')
+    });
+     
+})
+ 
+ 
+ 
+/**
+ * 在textarea光标后插入内容
+ * @param  string  str 需要插入的内容
+ */
+function insertHtmlAtCaret(str) {
+    var sel, range;
+    if(window.getSelection){
+        sel = window.getSelection();
+        if (sel.getRangeAt && sel.rangeCount) {
+            range = sel.getRangeAt(0);
+            range.deleteContents();
+            var el = document.createElement("div");
+            el.innerHTML = str;
+            var frag = document.createDocumentFragment(), node, lastNode;
+            while ( (node = el.firstChild) ) {
+                lastNode = frag.appendChild(node);
+            }
+                range.insertNode(frag);
+            if(lastNode){
+                range = range.cloneRange();
+                range.setStartAfter(lastNode);
+                range.collapse(true);
+                sel.removeAllRanges();
+                sel.addRange(range);
+            }
+        }
+    } else if (document.selection && document.selection.type != "Control") {
+        document.selection.createRange().pasteHTML(str);
+    }
+}
+</script>
+</body>
+</html>

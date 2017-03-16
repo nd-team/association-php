@@ -1,0 +1,304 @@
+{include file="public/header" /}
+
+
+
+				<div class="main-content">
+					<div class="breadcrumbs" id="breadcrumbs">
+						<script type="text/javascript">
+							try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+						</script>
+
+						{$crumbs.one}<!-- .breadcrumb -->
+
+						<div class="nav-search" id="nav-search">
+							<form class="form-search">
+								<span class="input-icon">
+									<input type="text" placeholder="Search ..." class="nav-search-input" id="nav-search-input" autocomplete="off" />
+									<i class="icon-search nav-search-icon"></i>
+								</span>
+							</form>
+						</div><!-- #nav-search -->
+					</div>
+
+					<div class="page-content">
+						{$crumbs.two}<!-- /.page-header -->
+
+						<div class="row sl">
+							<div class="col-xs-12">
+								<!-- PAGE CONTENT BEGINS -->
+								<div class="col-xs-4 col-sm-2 margintop5">
+									<a href="/admin/adminuser/add">
+										<button class="btn btn-sm btn-danger">
+											<i class="ace-icon fa fa-bolt bigger-110"></i>
+											添加管理员
+										</button>
+									</a>
+								</div>
+								<div class="row">
+									<div class="col-xs-12">
+										<div class="table-responsive">
+											<table id="sample-table-1" class="table table-striped table-bordered table-hover text-center">
+												<thead>
+													<tr>
+														<th>会员ID</th>
+														<th>昵称</th>
+														<th>电话</th>
+														<th>性别</th>
+														<th>生日</th>
+														<th>年龄</th>
+														<th>邮箱</th>
+														<th>地址</th>
+														<th>注册时间</th>
+														<th>登录次数</th>
+														<th>其他信息</th>
+														<th>
+															<i class="icon-time bigger-110 hidden-480"></i>
+															状态
+														</th>
+														<th class="hidden-480">操作</th>
+													</tr>
+												</thead>
+
+												<tbody>
+												{volist name="AllUser" id="vo" key="k" }
+													<tr>
+														<td>
+															{$vo.tu_id}
+														</td>
+														<td>
+															{$vo.nickname}
+														</td>
+														<td>{$vo.mobile}</td>
+														<td>{$vo.sex}</td>
+														<td>{$vo.birth_date}</td>
+														<td>{$vo.age}</td>
+														<td>{$vo.email}</td>
+														<td>{$vo.address}</td>
+														<td>{$vo.gen_time}</td>
+														<td>{$vo.count}</td>
+														<td>
+														<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">
+																<a href="#modal-table" no='' data-userid='{$vo.tu_id}' data-toggle="modal" class="tooltip-success select" data-rel="tooltip"  target="prompt" title="详细信息">
+																	<span class="blue">
+																		<i class="icon-eye-open bigger-180"></i>
+																	</span>
+																</a>															
+															</div>
+														</td>
+														<td><button class="btn btn-minier {$vo.bt} status" id="status{$vo.tu_id}" data-id="{$vo.tu_id}" data-status="{$vo.st}">{$vo.status}</button></td>
+														<td>
+															<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">
+																<a href="/admin/appuser/edit?id={$vo.tu_id}" class="tooltip-success"  data-rel="tooltip" title="修改">
+																	<span class="green">
+																		<i class="icon-edit bigger-190"></i>
+																	</span>
+																</a>
+															</div>	
+															<div class="visible-xs visible-sm hidden-md hidden-lg">
+																<div class="inline position-relative">
+																	<button class="btn btn-minier btn-yellow dropdown-toggle" data-toggle="dropdown">
+																		<i class="icon-caret-down icon-only bigger-120"></i>
+																	</button>
+
+																	<ul class="dropdown-menu dropdown-only-icon dropdown-yellow pull-right dropdown-caret dropdown-close">
+																		<li>
+																			<a href="/admin/appuser/edit?id={$vo.tu_id}" class="tooltip-info" data-rel="tooltip" title="修改">
+																				<span class="blue">
+																					<i class="icon-edit bigger-120"></i>
+																				</span>
+																			</a>
+																		</li>
+																	</ul>
+																</div>
+															</div>
+														</td>
+													</tr>
+													
+												{/volist}
+												<tr>
+													<td colspan="12" style="text-align:right">{$page}</td>
+												</tr>
+												</tbody>
+												
+											</table>
+										</div><!-- /.table-responsive -->
+									</div><!-- /span -->
+								</div><!-- /row -->
+								<div class="hr hr-18 dotted hr-double"></div>
+								
+								<div  class="modal fade group_show" tabindex="-1">
+									<div class="modal-dialog">
+										<div class="modal-content">
+											<div class="modal-header no-padding">
+												<div class="table-header" style="text-align:center;">
+													<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+														<span class="white">&times;</span>
+													</button>
+													其他信息
+												</div>
+											</div>
+
+											<div class="modal-body no-padding">
+												<table class="table table-striped table-bordered table-hover no-margin-bottom no-border-top">
+
+													<tbody class="by">
+													</tbody>
+												</table>
+											</div>
+
+											<div class="modal-footer no-margin-top u_page">
+												<button class="btn btn-sm btn-danger pull-left" data-dismiss="modal">
+													<i class="icon-remove"></i>
+													Close
+												</button>
+
+												
+											</div>
+										</div><!-- /.modal-content -->
+									</div><!-- /.modal-dialog -->
+								</div><!-- PAGE CONTENT ENDS -->
+							</div><!-- /.col -->
+						</div><!-- /.row -->
+						
+					</div><!-- /.page-content -->
+				</div><!-- /.main-content -->
+
+
+	{include file="public/footer" /}
+		<!-- basic scripts -->
+
+
+		<!--[if IE]>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<![endif]-->
+
+		<!--[if !IE]> -->
+
+		<script type="text/javascript">
+			window.jQuery || document.write("<script src='/public/effect/assets/js/jquery-2.0.3.min.js'>"+"<"+"/script>");
+		</script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+<script type="text/javascript">
+ window.jQuery || document.write("<script src='assets/js/jquery-1.10.2.min.js'>"+"<"+"/script>");
+</script>
+<![endif]-->
+
+		<script type="text/javascript">
+			if("ontouchend" in document) document.write("<script src='assets/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
+		</script>
+		<script src="/public/effect/assets/js/bootstrap.min.js"></script>
+		<script src="/public/effect/assets/js/typeahead-bs2.min.js"></script>
+
+		<!-- page specific plugin scripts -->
+
+		<script src="/public/effect/assets/js/jquery.dataTables.min.js"></script>
+		<script src="/public/effect/assets/js/jquery.dataTables.bootstrap.js"></script>
+
+		<!-- ace scripts -->
+
+		<script src="/public/effect/assets/js/ace-elements.min.js"></script>
+		<script src="/public/effect/assets/js/ace.min.js"></script>
+
+		<!-- inline scripts related to this page -->
+
+		<script type="text/javascript">
+			jQuery(function($) {
+				var oTable1 = $('#sample-table-2').dataTable( {
+				"aoColumns": [
+			      { "bSortable": false },
+			      null, null,null, null, null,
+				  { "bSortable": false }
+				] } );
+				
+				
+				$('table th input:checkbox').on('click' , function(){
+					var that = this;
+					$(this).closest('table').find('tr > td:first-child input:checkbox')
+					.each(function(){
+						this.checked = that.checked;
+						$(this).closest('tr').toggleClass('selected');
+					});
+						
+				});
+			$('.select').click(function (event){
+				$('.group_show').attr('id','modal-table')
+				var userid=$(this).data('userid');
+				$(".by").empty();
+				$.ajax({
+				   type: "POST",
+				   url: "/admin/appuser/other_info",
+				   data: "userid="+userid,
+				   success: function(msg){
+				//	if(msg.code){
+						var li='';
+						//$.each(msg.msg,function(index,array){
+							li+='<tr><td colspan="2" align="center" style="color:#000;font-size:16px;">更多信息</td></tr>';
+							li+='<tr><td>QQ：</td><td>'+msg.more_info.QQ+'</td></tr>';
+							li+='<tr><td>爱好：</td><td>'+msg.more_info.favour+'</td></tr>';
+							li+='<tr><td>星座：</td><td>'+msg.more_info.constellation+'</td></tr>';
+							li+='<tr><td>血型：</td><td>'+msg.more_info.bloodType+'</td></tr>';
+							li+='<tr><td colspan="2" align="center" style="color:#000;font-size:16px;">各资料统计</td></tr>';
+							li+='<tr><td>群数量：</td><td>'+msg.group+'</td></tr>';
+							li+='<tr><td>好友数量：</td><td>'+msg.friends+'</td></tr>';
+							li+='<tr><td>推荐人数：</td><td>'+msg.recommend+'</td></tr>';
+							li+='<tr><td>众筹次数：</td><td>'+msg.collect+'</td></tr>';
+						//});
+						var page=msg.page;												
+	
+						 $('.by').html(li);
+						 $('.u_page').html('');
+				  // }else{
+				//		layer.alert('没有数据',{icon: 5});
+				   //}
+					
+				   }
+				});
+			});
+			
+				$('[data-rel="tooltip"]').tooltip({placement: tooltip_placement});
+				function tooltip_placement(context, source) {
+					var $source = $(source);
+					var $parent = $source.closest('table')
+					var off1 = $parent.offset();
+					var w1 = $parent.width();
+			
+					var off2 = $source.offset();
+					var w2 = $source.width();
+			
+					if( parseInt(off2.left) < parseInt(off1.left) + parseInt(w1 / 2) ) return 'right';
+					return 'left';
+				}
+				
+				$('.status').click(function(){
+					var id=$(this).data('id');
+					var status=$(this).data('status');
+					//console.log($(this));return false;
+					$.ajax({
+					   type: "POST",
+					   url: "/admin/appuser/app_status",
+					   data: "id="+id+"&status="+status,
+					   success: function(msg){
+						 if(msg.code){
+							if(msg.msg=='ok'){
+								$('#status'+id).data('status',1);
+								$('#status'+id).html('开启');
+								$('#status'+id).removeClass('btn-danger');
+								$('#status'+id).addClass('btn-yellow');
+							}else{
+								$('#status'+id).data('status',0);
+								$('#status'+id).html('禁止');
+								$('#status'+id).removeClass('btn-yellow');
+								$('#status'+id).addClass('btn-danger');
+							}
+							
+						 }else{
+							layer.alert(msg.msg,{icon: 5});
+						 }
+					   }
+					});
+				});
+			})
+		</script>
