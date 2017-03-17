@@ -37,27 +37,27 @@ class App
 		if(!empty($_POST)){
 			
 			if(!isset($_POST['mobile'])){
-				return json(['code'=>1000,'data'=>'']);
+				return json(['code'=>1000,'data'=>json(''),'msgs'=>'mobile不能为空']);
 			}
 			if(!isset($_POST['password'])){
-				return json(['code'=>1000,'data'=>'']);
+				return json(['code'=>1000,'data'=>json(''),'msgs'=>'password不能为空']);
 			}
 			if(!isset($_POST['recommendId'])){
-				return json(['code'=>1000,'data'=>'']);
+				return json(['code'=>1000,'data'=>json(''),'msgs'=>'recommendId不能为空']);
 			}
 			$tu_id=trim($_POST['mobile']);
 			$nickname=trim($_POST['nickname']);
 			$userid=trim($_POST['recommendId']);
 			$check_recommend=$this->UserModel->check_recommend($_POST['mobile'],$_POST['recommendId']);
 			if(!$check_recommend){
-				return json(['code'=>1000,'data'=>'']);
+				return json(['code'=>1000,'data'=>json(''),'msgs'=>'推荐信息不存在']);
 				exit();
 			}
 			//var_dump($check_recommend);exit;
 			//检查用户号码是否存在
 			$check_user=$this->UserModel->check_user(trim($_POST['mobile']));
 			if($check_user==1){
-				return json(['code'=>0]);
+				return json(['code'=>0,'data'=>json(''),'msgs'=>'用户不存在']);
 				exit(0);
 			}
 			$result = $this->RongCloud->user()->getToken($tu_id, $nickname, '/public/effect/assets/avatars/avatar.jpg');
@@ -70,13 +70,13 @@ class App
 					//所以用户id
 					$users=$this->users($result['userId']);
 					//$this->RongCloud->message()->PublishSystem('00001',$users, 'RC:TxtMsg',"{\"content\":\"有新用户注册，可以去认领好友了哦~_~\",\"extra\":\"helloExtra\"}", 'thisisapush', '{\"pushData\":\"hello\"}', '0', '0');
-					return json(['code'=>200,'data'=>'']);
+					return json(['code'=>200,'data'=>json(''),'msgs'=>'注册成功']);
 				}else{
-					return json(['code'=>1000,'data'=>'']);
+					return json(['code'=>0,'data'=>json(''),'msgs'=>'未知错误']);
 				}
 			}
 		}else{
-			return json(['code'=>0]);
+			return json(['code'=>0,'data'=>json(''),'msgs'=>'未知错误']);
 		}
 
 	}
@@ -90,24 +90,23 @@ class App
 						->select();
 			if($checkUser)
 			{
-				return json(['code'=>100,'data'=>'']);
+				return json(['code'=>100,'data'=>json(''),'msgs'=>'用户不存在']);
 				exit();
 			}
 			$result=$this->UserModel->friendsRecommend($_POST);
 			if($result)
 			{
 				if($result=='error'){
-					return json(['code'=>300,'data'=>'']);
+					return json(['code'=>300,'data'=>json(''),'msgs'=>'推荐信息不存在']);
 				}else{
-					return json(['code'=>200,'data'=>$result]);
+					return json(['code'=>200,'data'=>$result,'msgs'=>'成功']);
 				}
 				
 			}else{
-				return json(['code'=>0,'data'=>'']);
+				return json(['code'=>0,'data'=>json(''),'msgs'=>'未知错误']);
 			}
 		}else{
-			
-			return json(['code'=>0,'data'=>'']);
+			return json(['code'=>0,'data'=>json(''),'msgs'=>'未知错误']);
 		}
 	}
 	//获取当前用户推荐列表（已推荐）
@@ -118,12 +117,12 @@ class App
 			$result=$this->UserModel->allRecommendsUsers($_POST);
 			if($result)
 			{
-				return json(['code'=>200,'data'=>$result]);
+				return json(['code'=>200,'data'=>$result,'msgs'=>'成功']);
 			}else{
-				return json(['code'=>0,'data'=>'']);
+				return json(['code'=>0,'data'=>array(),'msgs'=>'未知错误']);
 			}
 		}else{
-			return json(['code'=>0,'data'=>'']);
+			return json(['code'=>0,'data'=>array(),'msgs'=>'未知错误']);
 		}
 	}
 	
@@ -135,12 +134,12 @@ class App
 			$result=$this->UserModel->selectRecommendInfo($_POST);
 			if($result)
 			{
-				return json(['code'=>200,'data'=>$result]);
+				return json(['code'=>200,'data'=>$result,'msgs'=>'成功']);
 			}else{
-				return json(['code'=>0,'data'=>'']);
+				return json(['code'=>0,'data'=>json(''),'msgs'=>'未知错误']);
 			}
 		}else{
-			return json(['code'=>0,'data'=>'']);
+			return json(['code'=>0,'data'=>json(''),'msgs'=>'未知错误']);
 		}
 	}
 	
@@ -152,12 +151,12 @@ class App
 			$result=$this->UserModel->editRecommendInfo($_POST);
 			if($result)
 			{
-				return json(['code'=>200]);
+				return json(['code'=>200,'data'=>json(''),'msgs'=>'成功']);
 			}else{
-				return json(['code'=>0,'data'=>'']);
+				return json(['code'=>0,'data'=>json(''),'msgs'=>'未知错误']);
 			}
 		}else{
-			return json(['code'=>0,'data'=>'']);
+			return json(['code'=>0,'data'=>json(''),'msgs'=>'未知错误']);
 		}
 	}
 	
@@ -196,22 +195,17 @@ class App
 				$data['age']=$result['age'];
 				$data['recommendUserId']=$result['recommendUserId'];
 				$data['claimUserId']=$result['claimUserId'];
-				return json(['code'=>200,'data'=>$data]);
+				return json(['code'=>200,'data'=>$data,'msgs'=>'成功']);
 			}elseif($result==0){
-				return json(['code'=>0,'data'=>'']);
+				return json(['code'=>0,'data'=>json(''),'msgs'=>'未知错误']);
 			}elseif($result==1000){
-				return json(['code'=>1000,'data'=>'']);
+				return json(['code'=>1000,'data'=>json(''),'msgs'=>'禁止登录']);
 			}elseif($result==1001){
-				return json(['code'=>1001,'data'=>'']);
+				return json(['code'=>1001,'data'=>json(''),'msgs'=>'密码错误']);
 			}
 			
 		}else{
-			dump(Config::get());exit;
-			$aa=Db::table('ike_user')
-					->where('tu_id','13025304562')
-					->select();
-			var_dump($aa);exit;
-			return json(['code'=>0]);
+			return json(['code'=>0,'data'=>json(''),'msgs'=>'未知错误']);
 		}
 	}	
 	
@@ -229,12 +223,12 @@ class App
 				$data['userId']=$result['tu_id'];
 				$data['nickname']=$result['nickname'];
 				$data['userPortraitUrl']=$result['avatar_image'];
-				return json(['code'=>200,'data'=>$data]);
+				return json(['code'=>200,'data'=>$data,'msgs'=>'成功']);
 			}else{
-				return json(['code'=>0,'data'=>'']);
+				return json(['code'=>0,'data'=>json(''),'msgs'=>'未知错误']);
 			}
 		}else{
-			return json(['code'=>0,'data'=>'']);
+			return json(['code'=>0,'data'=>json(''),'msgs'=>'未知错误']);
 		}
 	}
 	
@@ -244,7 +238,7 @@ class App
 		if(!empty($_POST)){
 			$result=$this->UserModel->addfriendRequest($_POST);
 			if($result==11){
-				return json(['code'=>11,'data'=>'']);
+				return json(['code'=>11,'data'=>json(''),'msgs'=>'好友已存在']);
 			}elseif($result==200){
 				//TxtMsg 文本  VcMsg语言
 				//发送系统消息
@@ -253,12 +247,12 @@ class App
 				{\"operation\":\"op1\",\"sourceUserId\":\"".$_POST['userId']."\",\"targetUserId\":\"".$_POST['friendUserid']."\",\"message\":\"haha\",\"extra\":\"helloExtra\"}
 				
 				", 'thisisapush', '{\"pushData\":\"hello\"}', '0', '0');
-				return json(['code'=>200,'data'=>'']);
+				return json(['code'=>200,'data'=>json(''),'msgs'=>'成功']);
 			}elseif($result==100){
-				return json(['code'=>0,'data'=>'']);
+				return json(['code'=>0,'data'=>json(''),'msgs'=>'申请失败']);
 			}
 		}else{
-			return json(['code'=>0,'data'=>'']);
+			return json(['code'=>0,'data'=>json(''),'msgs'=>'未知错误']);
 		}
 	}
 	//获取申请添加用户(未读)
@@ -267,10 +261,12 @@ class App
 		if(!empty($_POST)){
 			$result=$this->UserModel->allUnreadFriends($_POST);
 			if($result){
-				return json(['code'=>200,'data'=>$result]);
+				return json(['code'=>200,'data'=>$result,'msgs'=>'成功']);
 			}else{
-				return json(['code'=>0,'data'=>'']);
+				return json(['code'=>200,'data'=>array(),'msgs'=>'没有好友申请']);
 			}
+		}else{
+			return json(['code'=>0,'data'=>array(),'msgs'=>'未知错误']);
 		}
 	}
 	//获取申请添加用户(all)
@@ -292,12 +288,12 @@ class App
 					$data[$k]['mobile']=$v['mobile'];					
 					$data[$k]['email']=$v['email'];					
 				}		
-				return json(['code'=>200,'data'=>$data]);
+				return json(['code'=>200,'data'=>$data,'msgs'=>'成功']);
 			}else{
-				return json(['code'=>0,'data'=>'']);
+				return json(['code'=>0,'data'=>array(),'msgs'=>'未知错误']);
 			}
 		}else{
-			return json(['code'=>0,'data'=>'']);
+			return json(['code'=>0,'data'=>array(),'msgs'=>'未知错误']);
 		}
 	}
 	
@@ -321,12 +317,12 @@ class App
 				$datas['displayName']='';
 				$datas['mobile']=$data['mobile'];
 				$datas['email']=$data['email'];
-				return json(['code'=>200,'data'=>$datas]);
+				return json(['code'=>200,'data'=>$datas,'msgs'=>'成功']);
 			}elseif($result==101){
-				return json(['code'=>101,'data'=>'']);
+				return json(['code'=>101,'data'=>json(''),'msgs'=>'已是好友']);
 			}
 		}else{
-			return json(['code'=>0,'data'=>'']);
+			return json(['code'=>0,'data'=>json(''),'msgs'=>'未知错误']);
 		}
 	}
 	
@@ -338,12 +334,12 @@ class App
 			$result=$this->UserModel->deleteUser($_POST);
 			if($result)
 			{
-				return json(['code'=>200]);
+				return json(['code'=>200,'data'=>json(''),'msgs'=>'成功']);
 			}else{
-				return json(['code'=>0,'data'=>'']);
+				return json(['code'=>0,'data'=>json(''),'msgs'=>'删除失败']);
 			}
 		}else{
-			return json(['code'=>0,'data'=>'']);
+			return json(['code'=>0,'data'=>json(''),'msgs'=>'未知错误']);
 		}
 	}
 	
@@ -362,12 +358,12 @@ class App
 					$data[$k]['displayName']=$v['displayname'];
 					
 				}
-				return json(['code'=>200,'data'=>$data]);
+				return json(['code'=>200,'data'=>$data,'msgs'=>'成功']);
 			}else{
-				return json(['code'=>0,'data'=>'']);
+				return json(['code'=>200,'data'=>array(),'msgs'=>'没有好友']);
 			}
 		}else{
-			return json(['code'=>0,'data'=>'']);
+			return json(['code'=>0,'data'=>array(),'msgs'=>'未知错误']);
 		}
 	}
 	
@@ -381,7 +377,7 @@ class App
 				$checkCreditScore=$this->UserModel->reputationStatistics($_POST['userId']);
 				if($checkCreditScore<200)
 				{
-					return json(['code'=>100,'data'=>'']);exit;
+					return json(['code'=>100,'data'=>json(''),'msgs'=>'创建兴趣群信誉值不够']);exit();
 				}else{
 					$hobby=$_POST['hobbyId'];
 				}
@@ -415,18 +411,18 @@ class App
 						$groupId['groupId']=$group_no;
 						//发送群组消息方法
 							$this->RongCloud->message()->publishGroup('00001',$group_no, 'RC:TxtMsg',"{\"content\":\"可以在群聊天了\",\"extra\":\"helloExtra\"}", 'thisisapush', '{\"pushData\":\"hello\"}', '1', '1');
-						return json(['code'=>200,'data'=>$groupId]);
+						return json(['code'=>200,'data'=>$groupId,'msgs'=>'成功']);
 					}else{
-						return json(['code'=>0,'data'=>'']);
+						return json(['code'=>0,'data'=>json(''),'msgs'=>'创建失败']);
 					}
 				}else{
-					return json(['code'=>0,'data'=>'']);
+					return json(['code'=>0,'data'=>json(''),'msgs'=>'未知错误']);
 				}
 			}else{
 				$this->createGroup($_POST);
 			}
 		}else{
-			return json(['code'=>0,'data'=>'']);
+			return json(['code'=>0,'data'=>json(''),'msgs'=>'未知错误']);
 		}
 	}
 	//添加群管理员
@@ -436,16 +432,16 @@ class App
 			$result=$this->UserModel->vicePrincipal($_POST);
 			if($result==200)
 			{
-				return json(['code'=>200,'data'=>'']);
+				return json(['code'=>200,'data'=>json(''),'msgs'=>'成功']);
 			}elseif($result==101){
-				return json(['code'=>101,'data'=>'']);
+				return json(['code'=>101,'data'=>json(''),'msgs'=>'用户已是群管理员']);
 			}elseif($result==102){
-				return json(['code'=>102,'data'=>'']);
+				return json(['code'=>102,'data'=>json(''),'msgs'=>'副群主已存在']);
 			}else{
-				return json(['code'=>0,'data'=>'']);
+				return json(['code'=>0,'data'=>json(''),'msgs'=>'添加失败']);
 			}
 		}else{
-			return 0;
+			return json(['code'=>0,'data'=>json(''),'msgs'=>'未知错误']);
 		}
 	}
 	//用户所在群（all）
@@ -457,13 +453,13 @@ class App
 			if($result)
 			{
 				
-				return json(['code'=>200,'data'=>$result]);
+				return json(['code'=>200,'data'=>$result,'msgs'=>'成功']);
 			}else
 			{
-				return json(['code'=>0,'data'=>'']);
+				return json(['code'=>200,'data'=>array(),'msgs'=>'没有群']);
 			}
 		}else{
-			return json(['code'=>0,'data'=>'']);
+			return json(['code'=>0,'data'=>array(),'msgs'=>'未知错误']);
 		}
 	}
 	
@@ -478,10 +474,12 @@ class App
 				$data['groupName']=$result['group_name'];
 				$data['groupPortraitUri']=$result['avatar_image'];
 				$data['role']=$result['role'];
-				return json(['code'=>200,'data'=>$data]);
+				return json(['code'=>200,'data'=>$data,'msgs'=>'成功']);
+			}else{
+				return json(['code'=>0,'data'=>json(''),'msgs'=>'未知错误']);
 			}
 		}else{
-			return json(['code'=>0,'data'=>'']);
+			return json(['code'=>0,'data'=>json(''),'msgs'=>'未知错误']);
 		}
 	}
 	
@@ -493,10 +491,12 @@ class App
 			$result=$this->UserModel->groupMember($_POST);
 			if($result)
 			{
-				return json(['code'=>200,'data'=>$result]);
+				return json(['code'=>200,'data'=>$result,'msgs'=>'成功']);
+			}else{
+				return json(['code'=>0,'data'=>array(),'msgs'=>'未知错误']);
 			}
 		}else{
-			return json(['code'=>0,'data'=>'']);
+			return json(['code'=>0,'data'=>array(),'msgs'=>'未知错误']);
 		}
 	}
 	
@@ -510,7 +510,7 @@ class App
 			$checkGroup=$this->UserModel->group_no_info($_POST['groupId']);
 			if(!$checkGroup)
 			{
-				return 0;
+				return json(['code'=>0,'data'=>array(),'msgs'=>'群不存在']);
 			}
 			$where['tu_id']=$_POST['userId'];
 			$where['group_id']=$checkGroup['group_id'];
@@ -521,7 +521,7 @@ class App
 				$check_user=reset($check_user);
 				if(!$check_user['status'])
 				{
-					return json(['code'=>100,'data'=>'']);
+					return json(['code'=>100,'data'=>json(''),'msgs'=>'用户不是群管理']);
 				}
 				$file = request()->file('file');
 				if(!empty($file))
@@ -545,16 +545,16 @@ class App
 						// 刷新群组信息方法(融云)
 						$this->RongCloud->group()->refresh($_POST['groupId'],$_POST['groupName']);
 					} 
-					return json(['code'=>200,'data'=>'']);
+					return json(['code'=>200,'data'=>json(''),'msgs'=>'成功']);
 				}else{
-					return json(['code'=>0,'data'=>'']);
+					return json(['code'=>0,'data'=>json(''),'msgs'=>'修改失败']);
 				}
 			}else{
-				return json(['code'=>0,'data'=>'']);
+				return json(['code'=>0,'data'=>json(''),'msgs'=>'用户不存在']);
 			}
 			
 		}else{
-			return json(['code'=>0,'data'=>'']);
+			return json(['code'=>0,'data'=>json(''),'msgs'=>'未知错误']);
 		}
 	}
 	
@@ -566,12 +566,12 @@ class App
 			$result=$this->UserModel->changeUserName($_POST);
 			if($result)
 			{
-				return json(['code'=>200,'data'=>'']);
+				return json(['code'=>200,'data'=>json(''),'msgs'=>'成功']);
 			}else{
-				return json(['code'=>0,'data'=>'']);
+				return json(['code'=>0,'data'=>json(''),'msgs'=>'修改失败']);
 			}
 		}else{
-			return json(['code'=>0,'data'=>'']);
+			return json(['code'=>0,'data'=>json(''),'msgs'=>'未知错误']);
 		}
 	}
 	
@@ -587,13 +587,13 @@ class App
 				$result = $this->RongCloud->group()->join($group_users,$_POST['groupId'],$group_info['group_name'],$_POST['userId']);
 				if($result)
 				{
-					return json(['code'=>200,'data'=>'']);
+					return json(['code'=>200,'data'=>json(''),'msgs'=>'成功']);
 				}
 			}else{
-				return json(['code'=>0,'data'=>'']);
+				return json(['code'=>0,'data'=>json(''),'msgs'=>'失败']);
 			}
 		}else{
-			return json(['code'=>0,'data'=>'']);
+			return json(['code'=>0,'data'=>json(''),'msgs'=>'未知错误']);
 		}
 	}
 	
@@ -605,12 +605,12 @@ class App
 			$group_info=$this->UserModel->group_no_info($_POST['groupId']);
 			$result=$this->UserModel->groupAuditingAllUser($group_info['group_id'],$_POST['userId']);
 			if($result){
-				return json(['code'=>200,'data'=>$result]);
+				return json(['code'=>200,'data'=>$result,'msgs'=>'成功']);
 			}else{
-				return json(['code'=>0,'data'=>'']);
+				return json(['code'=>200,'data'=>array(),'msgs'=>'没有']);
 			}
 		}else{
-			return json(['code'=>0,'data'=>'']);
+			return json(['code'=>0,'data'=>array(),'msgs'=>'未知错误']);
 		}
 	}
 	//群主审核加人人员（是否同意）
@@ -622,20 +622,18 @@ class App
 			if($result){
 				switch($result){
 					case 100:
-						return json(['code'=>200,'data'=>'']);
+						return json(['code'=>200,'data'=>json(''),'msgs'=>'成功']);
 						break;
 					case 200:
-						return json(['code'=>100,'data'=>'']);
-						break;
-					case 300:
-						return json(['code'=>300,'data'=>'']);
+						return json(['code'=>100,'data'=>json(''),'msgs'=>'已拒绝']);
 						break;
 				}
+				exit();
 			}else{
-				return json(['code'=>0,'data'=>'']);
+				return json(['code'=>0,'data'=>json(''),'msgs'=>'未知错误']);
 			}
 		}else{
-			return json(['code'=>0,'data'=>'']);
+			return json(['code'=>0,'data'=>json(''),'msgs'=>'未知错误']);
 		}
 	}
 	//退群/解散群
@@ -648,16 +646,16 @@ class App
 			{
 				// 解散群组方法(融云)
 				$this->RongCloud->group()->dismiss($_POST['groupUser'],$_POST['groupId']);
-				return json(['code'=>200,'data'=>'']);//解散群
+				return json(['code'=>200,'data'=>json(''),'msgs'=>'解散群']);//解散群
 			}elseif($result==100){
 				//踢出融云群用户
 				$this->RongCloud->group()->quit($_POST['groupUser'],$_POST['groupId']);
-				return json(['code'=>100,'data'=>'']);//退群
+				return json(['code'=>100,'data'=>json(''),'msgs'=>'退出群']);//退群
 			}else{
-				return json(['code'=>0,'data'=>'']);
+				return json(['code'=>0,'data'=>json(''),'msgs'=>'未知错误']);
 			}
 		}else{
-			return json(['code'=>0,'data'=>'']);
+			return json(['code'=>0,'data'=>json(''),'msgs'=>'未知错误']);
 		}
 	}
 	
@@ -669,12 +667,12 @@ class App
 			$result=$this->UserModel->editFriendName($_POST);
 			if($result)
 			{
-				return json(['code'=>200,'data'=>'']);
+				return json(['code'=>200,'data'=>json(''),'msgs'=>'成功']);
 			}else{
-				return json(['code'=>0,'data'=>'']);
+				return json(['code'=>200,'data'=>json(''),'msgs'=>'修改失败']);
 			}
 		}else{
-			return json(['code'=>0,'data'=>'']);
+			return json(['code'=>0,'data'=>json(''),'msgs'=>'未知错误']);
 		}
 	}
 	
@@ -722,13 +720,13 @@ class App
 						->select();
 				$user=reset($user);
 				$avatar_image['userPortraitUrl']=$user['avatar_image'];
-				return json(['code'=>200,'data'=>$avatar_image]);
+				return json(['code'=>200,'data'=>$avatar_image,'msgs'=>'成功']);
 				//return json(['code'=>200]);
 			}else{
-				return json(['code'=>0,'data'=>'']);
+				return json(['code'=>0,'data'=>json(''),'msgs'=>'修改失败']);
 			}
 		}else{
-			return json(['code'=>0,'data'=>'']);
+			return json(['code'=>0,'data'=>json(''),'msgs'=>'未知错误']);
 		}
 	}
 	
@@ -756,12 +754,12 @@ class App
 			$result=$this->UserModel->foundActives($_POST);
 			if($result)
 			{
-				return json(['code'=>200,'data'=>'']);
+				return json(['code'=>200,'data'=>json(''),'msgs'=>'成功']);
 			}else{
-				return json(['code'=>0,'data'=>'']);
+				return json(['code'=>0,'data'=>json(''),'msgs'=>'创建失败']);
 			}
 		}else{
-			return json(['code'=>0,'data'=>'']);
+			return json(['code'=>0,'data'=>json(''),'msgs'=>'未知错误']);
 		}
 	}
 	//加入群活动
@@ -772,22 +770,22 @@ class App
 			$result=$this->UserModel->joinActives($_POST);
 			if($result==200)
 			{
-				return json(['code'=>200,'data'=>'']);
+				return json(['code'=>200,'data'=>json(''),'msgs'=>'成功']);
 			}elseif($result==100){
-				return json(['code'=>100,'data'=>'']);
+				return json(['code'=>100,'data'=>json(''),'msgs'=>'非法操作']);
 			}elseif($result==101){
-				return json(['code'=>101,'data'=>'']);
+				return json(['code'=>101,'data'=>json(''),'msgs'=>'活动还未开始']);
 			}elseif($result==102){
-				return json(['code'=>102,'data'=>'']);
+				return json(['code'=>102,'data'=>json(''),'msgs'=>'活动结束']);
 			}elseif($result==103){
-				return json(['code'=>103,'data'=>'']);
+				return json(['code'=>103,'data'=>json(''),'msgs'=>'活动人数已满']);
 			}elseif($result==104){
-				return json(['code'=>104,'data'=>'']);
+				return json(['code'=>104,'data'=>json(''),'msgs'=>'活动已加入']);
 			}else{
-				return json(['code'=>0,'data'=>'']);
+				return json(['code'=>0,'data'=>json(''),'msgs'=>'加入失败']);
 			}
 		}else{
-			return json(['code'=>0,'data'=>'']);
+			return json(['code'=>0,'data'=>json(''),'msgs'=>'未知错误']);
 		}
 	}
 	
@@ -799,12 +797,12 @@ class App
 			$result=$this->UserModel->listActives($_POST);
 			if($result)
 			{
-				return json(['code'=>200,'data'=>$result]);
+				return json(['code'=>200,'data'=>$result,'msgs'=>'成功']);
 			}else{
-				return json(['code'=>0,'data'=>'']);
+				return json(['code'=>0,'data'=>array(),'msgs'=>'未知错误']);
 			}
 		}else{
-			return json(['code'=>0,'data'=>'']);
+			return json(['code'=>0,'data'=>array(),'msgs'=>'未知错误']);
 		}
 	}
 	
@@ -816,12 +814,12 @@ class App
 			$result=$this->UserModel->infoActives($_POST);
 			if($result)
 			{
-				return json(['code'=>200,'data'=>$result]);
+				return json(['code'=>200,'data'=>$result,'msgs'=>'成功']);
 			}else{
-				return 0;
+				return json(['code'=>0,'data'=>array(),'msgs'=>'未知错误']);
 			}
 		}else{
-			return json(['code'=>0,'data'=>'']);
+			return json(['code'=>0,'data'=>array(),'msgs'=>'未知错误']);
 		}
 	}
 	
@@ -838,16 +836,16 @@ class App
 			{
 				//踢出融云群用户
 				$this->RongCloud->group()->quit($users,$group_info['group_id']);
-				return json(['code'=>200,'data'=>'']); 
+				return json(['code'=>200,'data'=>json(''),'msgs'=>'成功']); 
 			}else{
-				return json(['code'=>0,'data'=>'']); 
+				return json(['code'=>0,'data'=>json(''),'msgs'=>'踢人失败']); 
 			}
 		}else{
-			return json(['code'=>0,'data'=>'']);
+			return json(['code'=>0,'data'=>json(''),'msgs'=>'未知错误']);
 		}
 	}
 	
-	//群推荐好友
+	//群推荐好友（邀人入群）
 	public function recommendUser()
 	{
 		if(!empty($_POST))
@@ -858,12 +856,12 @@ class App
 			$result=$this->UserModel->recommendUser($group_info['group_id'],$userId,$users);
 			if($result)
 			{
-				return json(['code'=>200,'data'=>'']);
+				return json(['code'=>200,'data'=>json(''),'msgs'=>'成功']);
 			}else{
-				return json(['code'=>0,'data'=>'']);
+				return json(['code'=>0,'data'=>json(''),'msgs'=>'邀人失败']);
 			}
 		}else{
-			return json(['code'=>0,'data'=>'']);
+			return json(['code'=>0,'data'=>json(''),'msgs'=>'未知错误']);
 		}
 	}
 	
@@ -875,21 +873,21 @@ class App
 			$group_info=$this->UserModel->group_no_info($_POST['groupId']);
 			if(!$group_info)
 			{
-				return json(['code'=>0,'data'=>'']);
+				return json(['code'=>0,'data'=>json(''),'msgs'=>'未知错误']);
 			}
 			$result=$this->UserModel->checkJoinUser($_POST,$group_info['group_id']);
 			if($result==100)
 			{
-				return json(['code'=>1,'data'=>'']);
+				return json(['code'=>1,'data'=>json(''),'msgs'=>'拒绝加入']);
 			}elseif($result==200){
-				return json(['code'=>2,'data'=>'']);
+				return json(['code'=>2,'data'=>json(''),'msgs'=>'同意']);
 			}elseif($result==300){
-				return json(['code'=>3,'data'=>'']);
+				return json(['code'=>3,'data'=>json(''),'msgs'=>'忽略']);
 			}else{
-				return json(['code'=>0,'data'=>'']);
+				return json(['code'=>0,'data'=>json(''),'msgs'=>'失败']);
 			}
 		}else{
-			return json(['code'=>0,'data'=>'']);
+			return json(['code'=>0,'data'=>json(''),'msgs'=>'未知错误']);
 		}
 	}
 	
@@ -903,9 +901,20 @@ class App
 			$result=$this->UserModel->groupApplyUser($groupId,$userId);
 			if($result)
 			{
-				return json(['code'=>200,'data'=>$result]);
+				if($result)
+				{
+					if($result==100)
+					{
+						return json(['code'=>200,'data'=>$result,'msgs'=>'没有']);
+					}else{
+						return json(['code'=>200,'data'=>array(),'msgs'=>'成功']);
+					}
+				}else{
+					return json(['code'=>0,'data'=>array(),'msgs'=>'未知错误']);
+				}
+				
 			}else{
-				return json(['code'=>0,'data'=>'']);
+				return json(['code'=>0,'data'=>array(),'msgs'=>'未知错误']);
 			}
 		}
 	}
@@ -918,9 +927,15 @@ class App
 			$result=$this->UserModel->allGroupApplyUser($userId);
 			if($result)
 			{
-				return json(['code'=>200,'data'=>$result]);
+				if($result==100)
+				{
+					return json(['code'=>200,'data'=>$result,'msgs'=>'没有']);
+				}else{
+					return json(['code'=>200,'data'=>array(),'msgs'=>'成功']);
+				}
+				
 			}else{
-				return json(['code'=>0,'data'=>'']);
+				return json(['code'=>0,'data'=>array(),'msgs'=>'未知错误']);
 			}
 		}
 	}
@@ -932,12 +947,12 @@ class App
 			$result=$this->UserModel->foundVote($_POST);
 			if($result)
 			{
-				return json(['code'=>200,'data'=>'']);
+				return json(['code'=>200,'data'=>json(''),'msgs'=>'成功']);
 			}else{
-				return json(['code'=>0,'data'=>'']);
+				return json(['code'=>0,'data'=>json(''),'msgs'=>'失败']);
 			}
 		}else{
-			return json(['code'=>0,'data'=>'']);
+			return json(['code'=>0,'data'=>json(''),'msgs'=>'未知错误']);
 		}
 	}
 	
@@ -949,12 +964,12 @@ class App
 			$result=$this->UserModel->voteList($_POST);
 			if($result)
 			{
-				return json(['code'=>200,'data'=>$result]);
+				return json(['code'=>200,'data'=>$result,'msgs'=>'成功']);
 			}else{
-				return json(['code'=>0,'data'=>'']);
+				return json(['code'=>200,'data'=>array(),'msgs'=>'没有']);
 			}
 		}else{
-			return json(['code'=>0,'data'=>'']);
+			return json(['code'=>0,'data'=>array(),'msgs'=>'未知错误']);
 		}
 	}
 	
@@ -966,12 +981,12 @@ class App
 			$result=$this->UserModel->voteDetails($_POST);
 			if($result)
 			{
-				return json(['code'=>200,'data'=>$result]);
+				return json(['code'=>200,'data'=>$result,'msgs'=>'成功']);
 			}else{
-				return json(['code'=>0,'data'=>'']);
+				return json(['code'=>0,'data'=>json(''),'msgs'=>'未知错误']);
 			}
 		}else{
-			return json(['code'=>0,'data'=>'']);
+			return json(['code'=>0,'data'=>json(''),'msgs'=>'未知错误']);
 		}
 	}
 	
@@ -983,18 +998,18 @@ class App
 			$result=$this->UserModel->voteCollect($_POST);
 			if($result==200)
 			{
-				return json(['code'=>200,'data'=>'']);
+				return json(['code'=>200,'data'=>json(''),'msgs'=>'成功']);
 			}elseif($result==101){
-				return json(['code'=>101,'data'=>'']);
+				return json(['code'=>101,'data'=>json(''),'msgs'=>'投票时间已结束']);
 			}elseif($result==102){
-				return json(['code'=>102,'data'=>'']);
+				return json(['code'=>102,'data'=>json(''),'msgs'=>'已投票']);
 			}elseif($result==103){
-				return json(['code'=>103,'data'=>'']);
+				return json(['code'=>103,'data'=>json(''),'msgs'=>'投票已关闭或已投票已失效']);
 			}else{
-				return json(['code'=>0,'data'=>'']);
+				return json(['code'=>0,'data'=>json(''),'msgs'=>'未知错误']);
 			}
 		}else{
-			return json(['code'=>0,'data'=>'']);
+			return json(['code'=>0,'data'=>json(''),'msgs'=>'未知错误']);
 		}
 	}
 	//兴趣联盟（群）
@@ -1004,12 +1019,12 @@ class App
 		{
 			$result=$this->UserModel->interestAlliance($_POST);
 			if($result){
-				return json(['code'=>200,'data'=>'']);
+				return json(['code'=>200,'data'=>json('')]);
 			}else{
-				return json(['code'=>0,'data'=>'']);
+				return json(['code'=>0,'data'=>json('')]);
 			}
 		}else{
-			return json(['code'=>0,'data'=>'']);
+			return json(['code'=>0,'data'=>json('')]);
 		}
 	}
 	//认领用户列表
@@ -1019,12 +1034,12 @@ class App
 		{
 			$result=$this->UserModel->allFriendsClaim($_POST,'id,fullName,mobile');
 			if($result){
-				return json(['code'=>200,'data'=>$result]);
+				return json(['code'=>200,'data'=>$result,'msgs'=>'成功']);
 			}else{
-				return json(['code'=>0,'data'=>'']);
+				return json(['code'=>200,'data'=>array(),'msgs'=>'没有']);
 			}
 		}else{
-			return json(['code'=>0,'data'=>'']);
+			return json(['code'=>0,'data'=>array(),'msgs'=>'未知错误']);
 		}
 	}
 	//认领用户
@@ -1034,31 +1049,31 @@ class App
 		{
 			$result=$this->UserModel->claimUser($_POST);
 			if($result==200){
-				return json(['code'=>200,'data'=>'']);
+				return json(['code'=>200,'data'=>json(''),'msgs'=>'成功']);
 			}elseif($result==100){
-				return json(['code'=>100,'data'=>'']);
+				return json(['code'=>100,'data'=>json(''),'msgs'=>'已认领']);
 			}elseif($result==101){
-				return json(['code'=>101,'data'=>'']);
+				return json(['code'=>101,'data'=>json(''),'msgs'=>'认领已回答，等待对方审核']);
 			}else{
-				return json(['code'=>0,'data'=>'']);
+				return json(['code'=>0,'data'=>json(''),'msgs'=>'未知错误']);
 			}
 		}else{
-			return json(['code'=>0]);
+			return json(['code'=>0,'data'=>json(''),'msgs'=>'未知错误']);
 		}
 	}
-	//显示需确认认领用户（问题正确未达到10个）
+	//显示需确认认领用户
 	public function allClaimConfirm()
 	{
 		if(!empty($_POST))
 		{
 			$result=$this->UserModel->allClaimConfirm($_POST);
 			if($result){
-				return json(['code'=>200,'data'=>$result]);
+				return json(['code'=>200,'data'=>$result,'msgs'=>'成功']);
 			}else{
-				return json(['code'=>0,'data'=>'']);
+				return json(['code'=>0,'data'=>array(),'msgs'=>'未知错误']);
 			}
 		}else{
-			return json(['code'=>0,'data'=>'']);
+			return json(['code'=>0,'data'=>array(),'msgs'=>'未知错误']);
 		}
 	}
 	//认领用户确认（问题正确未达到10个）
@@ -1068,12 +1083,12 @@ class App
 		{
 			$result=$this->UserModel->claimConfirm($_POST);
 			if($result){
-				return json(['code'=>200,'data'=>'']);
+				return json(['code'=>200,'data'=>json(''),'msgs'=>'成功']);
 			}else{
-				return json(['code'=>0,'data'=>'']);
+				return json(['code'=>0,'data'=>json(''),'msgs'=>'失败']);
 			}
 		}else{
-			return json(['code'=>0,'data'=>'']);
+			return json(['code'=>0,'data'=>json(''),'msgs'=>'未知错误']);
 		}
 	}
 	
@@ -1085,12 +1100,12 @@ class App
 			$result=$this->UserModel->directNexusChart($_POST);
 			if($result)
 			{
-				return json(['code'=>200,'data'=>$result]);
+				return json(['code'=>200,'data'=>$result,'msgs'=>'成功']);
 			}else{
-				return json(['code'=>0,'data'=>'']);
+				return json(['code'=>0,'data'=>json(''),'msgs'=>'未知错误']);
 			}
 		}else{
-			return json(['code'=>0,'data'=>'']);
+			return json(['code'=>0,'data'=>json(''),'msgs'=>'未知错误']);
 		}
 	}
 	/*
@@ -1118,12 +1133,12 @@ class App
 			$result=$this->UserModel->selectMoreUserInfo($_POST);
 			if($result)
 			{
-				return json(['code'=>200,'data'=>$result]);
+				return json(['code'=>200,'data'=>$result,'msgs'=>'成功']);
 			}else{
-				return json(['code'=>0,'data'=>'']);
+				return json(['code'=>0,'data'=>json(''),'msgs'=>'未知错误']);
 			}
 		}else{
-			return json(['code'=>0,'data'=>'']);
+			return json(['code'=>0,'data'=>json(''),'msgs'=>'未知错误']);
 		}
 	}
 	
@@ -1135,12 +1150,12 @@ class App
 			$result=$this->UserModel->editMoreUserInfo($_POST);
 			if($result)
 			{
-				return json(['code'=>200,'data'=>'']);
+				return json(['code'=>200,'data'=>json(''),'msgs'=>'成功']);
 			}else{
-				return json(['code'=>0,'data'=>'']);
+				return json(['code'=>0,'data'=>json(''),'msgs'=>'修改失败']);
 			}
 		}else{
-			return json(['code'=>0,'data'=>'']);
+			return json(['code'=>0,'data'=>json(''),'msgs'=>'未知错误']);
 		}
 	}
 	//查看对方信息（基本信息）
@@ -1151,12 +1166,12 @@ class App
 			$result=$this->UserModel->selectUserInfo($_POST);
 			if($result)
 			{
-				return json(['code'=>200,'data'=>$result]);
+				return json(['code'=>200,'data'=>$result,'msgs'=>'成功']);
 			}else{
-				return json(['code'=>0,'data'=>'']);
+				return json(['code'=>0,'data'=>json(''),'msgs'=>'未知错误']);
 			}
 		}else{
-			return json(['code'=>0,'data'=>'']);
+			return json(['code'=>0,'data'=>json(''),'msgs'=>'未知错误']);
 		}
 	}
 	
@@ -1187,16 +1202,16 @@ class App
 				$result=$this->UserModel->productCollect($_POST);
 				if($result)
 				{
-					return json(['code'=>200,'data'=>'']);
+					return json(['code'=>200,'data'=>json(''),'msgs'=>'成功']);
 				}else{
-					return json(['code'=>0,'data'=>'']);
+					return json(['code'=>0,'data'=>json(''),'msgs'=>'未知错误']);
 				}
 			}else{
-				return json(['code'=>0,'data'=>'']);
+				return json(['code'=>0,'data'=>json(''),'msgs'=>'未知错误']);
 			}
 			
 		}else{
-			return json(['code'=>0,'data'=>'']);
+			return json(['code'=>0,'data'=>json(''),'msgs'=>'未知错误']);
 		}
 	}
 	
@@ -1207,12 +1222,12 @@ class App
 		{
 			$result=$this->UserModel->share($_POST);
 			if($result){
-				return json(['code'=>200,'data'=>'']);
+				return json(['code'=>200,'data'=>json(''),'msgs'=>'成功']);
 			}else{
-				return json(['code'=>0,'data'=>'']);
+				return json(['code'=>0,'data'=>json(''),'msgs'=>'未知错误']);
 			}
 		}else{
-			return json(['code'=>0,'data'=>'']);
+			return json(['code'=>0,'data'=>json(''),'msgs'=>'未知错误']);
 		}
 	}
 	
@@ -1225,16 +1240,16 @@ class App
 			if($result){
 				if($result==200)
 				{
-					return json(['code'=>200,'data'=>'']);
+					return json(['code'=>200,'data'=>json(''),'msgs'=>'成功']);
 				}elseif($result==100){
-					return json(['code'=>100,'data'=>'']);
+					return json(['code'=>100,'data'=>json(''),'msgs'=>'已评论']);
 				}
 				
 			}else{
-				return json(['code'=>0,'data'=>'']);
+				return json(['code'=>0,'data'=>json(''),'msgs'=>'未知错误']);
 			}
 		}else{
-			return json(['code'=>0,'data'=>'']);
+			return json(['code'=>0,'data'=>json(''),'msgs'=>'未知错误']);
 		}
 	}
 	
@@ -1245,12 +1260,12 @@ class App
 		{
 			$result=$this->UserModel->allShareComment($_POST);
 			if($result){
-				return json(['code'=>200,'data'=>$result]);
+				return json(['code'=>200,'data'=>$result,'msgs'=>'成功']);
 			}else{
-				return json(['code'=>0,'data'=>'']);
+				return json(['code'=>0,'data'=>array(),'msgs'=>'未知错误']);
 			}
 		}else{
-			return json(['code'=>0,'data'=>'']);
+			return json(['code'=>0,'data'=>array(),'msgs'=>'未知错误']);
 		}
 	}
 	
@@ -1262,15 +1277,15 @@ class App
 			$result=$this->UserModel->sharePraise($_POST);
 			if($result){
 				if($result==200){
-					return json(['code'=>200,'data'=>'']);
+					return json(['code'=>200,'data'=>json(''),'msgs'=>'成功']);
 				}elseif($result==100){
-					return json(['code'=>100,'data'=>'']);
+					return json(['code'=>100,'data'=>json(''),'msgs'=>'已点赞']);
 				}
 			}else{
-				return json(['code'=>0,'data'=>'']);
+				return json(['code'=>0,'data'=>json(''),'msgs'=>'未知错误']);
 			}
 		}else{
-			return json(['code'=>0,'data'=>'']);
+			return json(['code'=>0,'data'=>json(''),'msgs'=>'未知错误']);
 		}
 	}
 	
@@ -1282,15 +1297,15 @@ class App
 			$result=$this->UserModel->shareReport($_POST);
 			if($result){
 				if($result==200){
-					return json(['code'=>200,'data'=>'']);
+					return json(['code'=>200,'data'=>json(''),'msgs'=>'成功']);
 				}elseif($result==100){
-					return json(['code'=>100,'data'=>'']);
+					return json(['code'=>100,'data'=>json(''),'msgs'=>'已举报']);
 				}
 			}else{
-				return json(['code'=>0,'data'=>'']);
+				return json(['code'=>0,'data'=>json(''),'msgs'=>'未知错误']);
 			}
 		}else{
-			return json(['code'=>0,'data'=>'']);
+			return json(['code'=>0,'data'=>json(''),'msgs'=>'未知错误']);
 		}
 	}
 	
@@ -1301,12 +1316,12 @@ class App
 		{
 			$result=$this->UserModel->groupNotice($_POST);
 			if($result){
-				return json(['code'=>200,'data'=>'']);
+				return json(['code'=>200,'data'=>json(''),'msgs'=>'成功']);
 			}else{
-				return json(['code'=>0,'data'=>'']);
+				return json(['code'=>0,'data'=>json(''),'msgs'=>'未知错误']);
 			}
 		}else{
-			return json(['code'=>0,'data'=>'']);
+			return json(['code'=>0,'data'=>json(''),'msgs'=>'未知错误']);
 		}
 	}
 	
@@ -1317,12 +1332,12 @@ class App
 		{
 			$result=$this->UserModel->queryGroupNotice($_POST);
 			if($result){
-				return json(['code'=>200,'data'=>$result]);
+				return json(['code'=>200,'data'=>$result,'msgs'=>'成功']);
 			}else{
-				return json(['code'=>0,'data'=>'']);
+				return json(['code'=>0,'data'=>array(),'msgs'=>'未知错误']);
 			}
 		}else{
-			return json(['code'=>0,'data'=>'']);
+			return json(['code'=>0,'data'=>array(),'msgs'=>'未知错误']);
 		}
 	}
 	

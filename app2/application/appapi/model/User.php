@@ -692,27 +692,30 @@ class User extends Model
 					->where($where)
 					->field('tu_id')
 					->select();
-		foreach($result as $k=>$v)
-		{
-			//$result[$k]['userId']=$v['tu_id'];
-			$userinfo=Db::view('user','tu_id,nickname')
-						->view('avatar','avatar_image','user.avatar_id=avatar.avatar_id')
-						->where('tu_id',$v['tu_id'])
-						->select();
-			if(!$userinfo)
+		if($result)
+		{		
+			foreach($result as $k=>$v)
 			{
-				continue;
-			}else{
+				//$result[$k]['userId']=$v['tu_id'];
+				$userinfo=Db::view('user','tu_id,nickname')
+							->view('avatar','avatar_image','user.avatar_id=avatar.avatar_id')
+							->where('tu_id',$v['tu_id'])
+							->select();
+				if(!$userinfo)
+				{
+					continue;
+				}else{
+					
+					$userinfo=reset($userinfo);
+					$result[$k]['userId']=$userinfo['tu_id'];
+					$result[$k]['nickname']=$userinfo['nickname'];
+					$result[$k]['avatarImage']=$userinfo['avatar_image'];
+				}
 				
-				$userinfo=reset($userinfo);
-				$result[$k]['userId']=$userinfo['tu_id'];
-				$result[$k]['nickname']=$userinfo['nickname'];
-				$result[$k]['avatarImage']=$userinfo['avatar_image'];
+				unset($result[$k]['tu_id']);
 			}
-			
-			unset($result[$k]['tu_id']);
+			return $result;
 		}
-		return $result;
 	}
 	
 	//获取申请添加用户(all)
@@ -796,7 +799,7 @@ class User extends Model
 						}
 						return 200;
 					}else{
-						return 101;
+						return 0;
 					}
 				}else{
 					return 101;
@@ -1078,6 +1081,10 @@ class User extends Model
 			$group_users=Db::table('ike_group_user')
 					->where('group_id',$result['group_id'])
 					->select();
+			if(!$group_users)
+			{
+				return 0;
+			}
 			foreach($group_users as $k=>$v)
 			{
 				$role=$v['status'];
@@ -1956,7 +1963,7 @@ class User extends Model
 			}
 			return $apply;
 		}else{
-			return 0;
+			return 100;
 		}	
 	}
 	//申请加入群信息（所有群）
@@ -2005,7 +2012,7 @@ class User extends Model
 			}
 			return $apply;
 		}else{
-			return 0;
+			return 100;
 		}	
 	}
 	//投票主题创建
@@ -2300,7 +2307,6 @@ class User extends Model
 					}else{
 						$friends[$k]['fullName']=null;//真实姓名
 					}
-					
 					$friends[$k]['nickname']=$userInfo['nickname'];
 					$friends[$k]['numberId']=$userInfo['userid'];//会员id2
 					$friends[$k]['userPortraitUrl']=$userInfo['avatar_image'];//用户头像
@@ -2324,6 +2330,11 @@ class User extends Model
 			if($all_recommend){
 				foreach($all_recommend as $k=>$v)
 				{
+					$userInfo=$this->userinfo($v['tu_id']);
+					if(!$userInfo)
+					{
+						continue;
+					}
 					$friends[$k]['recommendId']=$v['id'];//推荐表id
 					if($v['SfullName']==1)
 					{
@@ -2331,11 +2342,26 @@ class User extends Model
 					}else{
 						$friends[$k]['fullName']=null;//真实姓名
 					}
-					$userInfo=$this->userinfo($v['tu_id']);
 					$friends[$k]['nickname']=$userInfo['nickname'];
 					$friends[$k]['numberId']=$userInfo['userid'];//会员id2
 					$friends[$k]['userPortraitUrl']=$userInfo['avatar_image'];//用户头像
-					$friends[$k]['userId']=$v['userId'];//推荐用户id
+					$claimUserInfo=$this->userinfo($v['userId']);
+					$friends[$k]['claimNumberId']=$claimUserInfo['userid'];//推荐人编号
+					$friends[$k]['claimNickName']=$claimUserInfo['nickname'];//推荐人昵称
+					$moreUserInfo=Db::table('ike_recommend_content')
+									->where('tu_id',$v['userId'])
+									->select();
+					$friends[$k]['claimFullName']=null;//推荐人真实姓名
+					if($moreUserInfo)
+					{
+						$moreUserInfo=reset($moreUserInfo);
+						if($moreUserInfo['SfullName'])
+						{
+							$friends[$k]['claimFullName']=$moreUserInfo['fullName'];//推荐人真实姓名
+						}
+						
+					}
+					
 				}
 				return $friends;
 			}else{
@@ -2548,7 +2574,7 @@ class User extends Model
 		}
 	}
 	
-	//显示需确认认领用户（问题正确未达到10个）
+	//显示需确认认领用户
 	public function allClaimConfirm(array $data)
 	{
 		$checkUser=Db::table('ike_user')
