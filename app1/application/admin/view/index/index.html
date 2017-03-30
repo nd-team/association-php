@@ -1,0 +1,694 @@
+
+{include file="public/header" /} 
+				<div class="main-content">
+					<div class="breadcrumbs" id="breadcrumbs">
+						<script type="text/javascript">
+							try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+						</script>
+
+						{$crumbs.one}<!-- .breadcrumb -->
+
+						<div class="nav-search" id="nav-search">
+							<form class="form-search">
+								<span class="input-icon">
+									<input type="text" placeholder="Search ..." class="nav-search-input" id="nav-search-input" autocomplete="off" />
+									<i class="icon-search nav-search-icon"></i>
+								</span>
+							</form>
+						</div><!-- #nav-search -->
+					</div>
+
+					<div class="page-content">
+						{$crumbs.two}<!-- /.page-header -->
+
+						<div class="row">
+							<div class="col-xs-12">
+								<!-- PAGE CONTENT BEGINS -->
+
+								<div class="alert alert-block alert-success">
+									<button type="button" class="close" data-dismiss="alert">
+										<i class="icon-remove"></i>
+									</button>
+
+									<i class="icon-ok green"></i>
+
+									欢迎使用
+									<strong class="green">
+										后台管理系统
+										
+									</strong>
+										
+								</div>
+
+								<div class="row">
+									<div class="space-6"></div>
+
+									<div class="col-sm-7 infobox-container">
+										<div class="infobox infobox-red  ">
+											<div class="infobox-icon">
+												<i class="icon-group"></i>
+											</div>
+
+											<div class="infobox-data">
+												<span class="infobox-data-number">{$count}</span>
+												<div class="infobox-content">总会员用户</div>
+											</div>
+										</div>
+										
+										<div class="infobox infobox-red  ">
+											<div class="infobox-icon">
+												<i class="icon-twitter"></i>
+											</div>
+
+											<div class="infobox-data">
+												<span class="infobox-data-number">{$yesdata_count}</span>
+												<div class="infobox-content">昨日新增会员用户</div>
+											</div>
+										</div>
+
+										
+
+										<div class="infobox infobox-blue  ">
+											<div class="infobox-icon">
+												<i class="icon-group"></i>
+											</div>
+
+											<div class="infobox-data">
+												<span class="infobox-data-number">{$admin_count}</span>
+												<div class="infobox-content">后台管理用户</div>
+											</div>
+										</div>
+
+
+									{if $disk}
+										{foreach $disk as $k=>$v}
+											<div class="infobox infobox-blue2  ">
+												
+													<div class="infobox-progress">
+														<div class="easy-pie-chart percentage" data-percent="42" data-size="46">
+															<span class="percent" style="font-size:11px">
+																{$disk[$k][2]}
+															</span>
+														</div>
+													</div>
+													<div class="infobox-data">
+														<span class="infobox-text">空间使用</span>
+
+														<div class="infobox-content">
+															<span class="bigger-110">~</span>
+															{$k}盘剩余{$disk[$k][0]}
+														</div>
+													</div>											
+											</div>
+										{/foreach}
+									{/if}
+										<div class="space-6"></div>
+
+										
+									</div>
+
+									<div class="vspace-sm"></div>
+
+									<div class="col-sm-5">
+										<div class="widget-box">
+											<div class="widget-header widget-header-flat widget-header-small">
+												<h5>
+													<i class="icon-signal"></i>
+													会员人数比例
+												</h5>
+
+											</div>
+
+											<div class="widget-body">
+												<div class="widget-main">
+													<div id="piechart-placeholder"></div>
+
+													<div class="hr hr8 hr-double"></div>
+
+													<div class="clearfix">
+														<div class="grid3">
+															<span class="grey">
+																<i class="icon-user icon-2x blue"></i>
+																&nbsp; 男
+															</span>
+															<h4 class="bigger pull-right">{$user_sex_m['m']}</h4>
+														</div>
+														
+														<div class="grid3">
+															<span class="grey">
+																<i class="icon-user icon-2x red"></i>
+																&nbsp; 女
+															</span>
+															<h4 class="bigger pull-right">{$user_sex_g['g']}</h4>
+														</div>
+														
+														<div class="grid3">
+															<span class="grey">
+																<i class="icon-user icon-2x purple"></i>
+																&nbsp; 未知
+															</span>
+															<h4 class="bigger pull-right">{$user_sex_u['u']}</h4>
+														</div>
+
+														
+													</div>
+												</div><!-- /widget-main -->
+											</div><!-- /widget-body -->
+										</div><!-- /widget-box -->
+									</div><!-- /span -->
+								</div><!-- /row -->
+
+								
+								
+								<div class="row">
+									<div class="col-sm-5">
+										<div class="widget-box transparent">
+											<div class="widget-header widget-header-flat">
+												<h4 class="lighter">
+													<i class="icon-star orange"></i>
+													系统信息
+												</h4>
+
+												<div class="widget-toolbar">
+													<a href="#" data-action="collapse">
+														<i class="icon-chevron-up"></i>
+													</a>
+												</div>
+											</div>
+
+											<div class="widget-body">
+												<div class="widget-main no-padding">
+													<table class="table table-bordered table-striped">
+
+														<tbody>
+															<tr>
+																<td>
+																	<i class="icon-caret-right blue"></i>
+																	服务器操作系统
+																</td>
+
+																<td>
+																	{$Think.const.PHP_OS}
+																</td>
+															</tr>
+															<tr>
+																<td>
+																	<i class="icon-caret-right blue"></i>
+																	运行环境
+																</td>
+
+																<td>
+																	{$_SERVER['SERVER_SOFTWARE']}
+																</td>
+															</tr>
+															<tr>
+																<td>
+																	<i class="icon-caret-right blue"></i>
+																	MYSQL版本
+																</td>
+
+																<td>
+																	{php}
+																		$system_info_mysql = \think\Db::query('select version() as v;');
+																	{/php}
+																	{php}
+																		echo $system_info_mysql[0]['v'];
+																	{/php}
+																</td>
+															</tr>
+															<tr>
+																<td>
+																	<i class="icon-caret-right blue"></i>
+																	上传限制
+																</td>
+
+																<td>
+																	{:ini_get('upload_max_filesize')}
+																</td>
+															</tr>
+														</tbody>
+													</table>
+												</div><!-- /widget-main -->
+											</div><!-- /widget-body -->
+											
+										</div><!-- /widget-box -->
+										
+									</div>
+									<div class="col-sm-7">
+										<div class="widget-box transparent">
+											<div class="widget-header widget-header-flat">
+												<h4 class="lighter">
+													<i class="icon-signal"></i>
+													个人信息
+												</h4>
+
+												<div class="widget-toolbar">
+													<a href="#" data-action="collapse">
+														<i class="icon-chevron-up"></i>
+													</a>
+												</div>
+											</div>
+
+											<div class="widget-body">
+												<div class="widget-main no-padding">
+													<table class="table table-bordered table-striped">
+
+														<tbody>
+															<tr>
+																<td>
+																	<i class="icon-caret-right blue"></i>
+																	账号名：
+																</td>
+
+																<td>
+																	{$admininfo.admin_name}
+																</td>
+															</tr>
+															<tr>
+																<td>
+																	<i class="icon-caret-right blue"></i>
+																	会员类型：
+																</td>
+
+																<td>
+																	{$admininfo.type_name}
+																</td>
+															</tr>
+															<tr>
+																<td>
+																	<i class="icon-caret-right blue"></i>
+																	最后登录时间：
+																</td>
+
+																<td>
+																	{$admininfo.login_time}
+																</td>
+															</tr>
+															<tr>
+																<td>
+																	<i class="icon-caret-right blue"></i>
+																	最后登录IP/地址：
+																</td>
+
+																<td>
+																	{$admininfo.login_ip}
+																</td>
+															</tr>
+															<tr>
+																<td>
+																	<i class="icon-caret-right blue"></i>
+																	登录次数：
+																</td>
+
+																<td>
+																	{$admininfo.count}
+																</td>
+															</tr>
+														</tbody>
+													</table>
+												</div><!-- /widget-main -->
+											</div><!-- /widget-body -->
+										</div><!-- /widget-box -->
+									</div>
+								</div>
+								
+								<div class="hr hr32 hr-dotted"></div>
+
+								<div class="row">
+									<div class="col-sm-5">
+										<div class="widget-box transparent">
+											<div class="widget-header widget-header-flat">
+												<h4 class="lighter">
+													<i class="icon-star orange"></i>
+													配置
+												</h4>
+
+												<div class="widget-toolbar">
+													<a href="#" data-action="collapse">
+														<i class="icon-chevron-up"></i>
+													</a>
+												</div>
+											</div>
+
+											<div class="widget-body">
+												<div class="widget-main no-padding">
+													<div class="panel panel-default">
+														<div class="panel-heading">
+															<i class="ace-icon fa fa-wrench"></i>
+															<span class="icon-desktop"></span> 日常维护
+														</div>
+														<table class="table">
+															<tbody>
+															<tr>
+																<td colspan="2">
+																	<a href="/admin/index/maintain?action=trace_off" class="btn btn-default maintain" style="margin-bottom:1px;">关闭Trace</a>
+																	<a href="/admin/index/maintain?action=trace_on" class="btn btn-default maintain" style="margin-bottom:1px;">打开Trace</a>
+																	<a href="/admin/index/maintain?action=view_log" class="btn btn-default rst-url-btn maintain" target="prompt" style="margin-bottom:1px;">查看日志</a>
+																	<a href="/admin/index/maintain?action=download_log" class="btn btn-default rst-url-btn maintain" style="margin-bottom:1px;">下载日志</a>
+																	<a href="/admin/index/maintain?action=clear_log" class="btn btn-default rst-url-btn maintain" style="margin-bottom:1px;">清除日志</a>
+																</td>
+															</tr>
+															<tr>
+																	<td>日志大小 : {$log_size|format_bytes}</td>
+																	<td>日志数 : {$log_file_cnt}</td>
+															</tr>
+															</tbody>
+														</table>
+													</div>
+												</div><!-- /widget-main -->
+											</div><!-- /widget-body -->
+										</div><!-- /widget-box -->
+									</div>
+
+									<div class="col-sm-7">
+										<div class="widget-box transparent">
+											<div class="widget-header widget-header-flat">
+												<h4 class="lighter">
+													<i class="icon-signal"></i>
+													销售统计
+												</h4>
+
+												<div class="widget-toolbar">
+													<a href="#" data-action="collapse">
+														<i class="icon-chevron-up"></i>
+													</a>
+												</div>
+											</div>
+
+											<div class="widget-body">
+												<div class="widget-main padding-4">
+													<div id="sales-charts"></div>
+												</div><!-- /widget-main -->
+											</div><!-- /widget-body -->
+										</div><!-- /widget-box -->
+									</div>
+								</div>
+
+								<div class="hr hr32 hr-dotted"></div>
+
+								<div class="row">
+									
+
+									<div class="col-sm-12">
+										<div class="widget-box ">
+											<div class="widget-header">
+												<h4 class="lighter smaller">
+													<i class="icon-comment blue"></i>
+													会话
+												</h4>
+											</div>
+
+											<div class="widget-body">
+												<div class="widget-main no-padding">
+													<div class="dialogs">
+													{foreach $loginlog as $k=>$v}
+														<div class="itemdiv dialogdiv">
+															<div class="user">
+																<img alt="Alexa's Avatar" src="/public/effect/assets/avatars/avatar1.png" />
+															</div>
+
+															<div class="body">
+																<div class="time">
+																	<i class="icon-time"></i>
+																	<span class="green">{$v.log_login_time}前</span>
+																</div>
+
+																<div class="name">
+																	<a href="#">{$v.log_ip}</a>
+																</div>
+																<div class="text">{$v.log_content}</div>
+
+																<div class="tools">
+																	<a href="#" class="btn btn-minier btn-info">
+																		<i class="icon-only icon-share-alt"></i>
+																	</a>
+																</div>
+															</div>
+														</div>
+
+													{/foreach}
+
+
+
+													</div>
+
+												</div><!-- /widget-main -->
+											</div><!-- /widget-body -->
+										</div><!-- /widget-box -->
+									</div><!-- /span -->
+								</div><!-- /row -->
+
+								<!-- PAGE CONTENT ENDS -->
+							</div><!-- /.col -->
+						</div><!-- /.row -->
+					</div><!-- /.page-content -->
+				</div><!-- /.main-content -->
+
+{include file="public/footer" /} 
+
+		<!-- basic scripts -->
+
+		<!--[if !IE]> -->
+
+		{js href="/public/effect/assets/js/jquery.min.js"}
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<![endif]-->
+
+		<!--[if !IE]> -->
+
+		<script type="text/javascript">
+			window.jQuery || document.write("<script src='/public/effect/assets/js/jquery-2.0.3.min.js'>"+"<"+"script>");
+		</script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+<script type="text/javascript">
+ window.jQuery || document.write("<script src='assets/js/jquery-1.10.2.min.js'>"+"<"+"script>");
+</script>
+<![endif]-->
+
+		<script type="text/javascript">
+			if("ontouchend" in document) document.write("<script src='/public/effect/assets/js/jquery.mobile.custom.min.js'>"+"<"+"script>");
+		</script>
+		{js href="/public/effect/assets/js/bootstrap.min.js"}
+		{js href="/public/effect/assets/js/typeahead-bs2.min.js"}
+
+		<!-- page specific plugin scripts -->
+
+		<!--[if lte IE 8]>
+		  <script src="assets/js/excanvas.min.js"></script>
+		<![endif]-->
+		
+		{js href="/public/effect/assets/js/jquery-ui-1.10.3.custom.min.js"}
+		{js href="/public/effect/assets/js/jquery.ui.touch-punch.min.js"}
+		{js href="/public/effect/assets/js/jquery.slimscroll.min.js"}
+		{js href="/public/effect/assets/js/jquery.easy-pie-chart.min.js"}
+		{js href="/public/effect/assets/js/jquery.sparkline.min.js"}
+		{js href="/public/effect/assets/js/flot/jquery.flot.min.js"}
+		{js href="/public/effect/assets/js/flot/jquery.flot.pie.min.js"}
+		{js href="/public/effect/assets/js/flot/jquery.flot.resize.min.js"}
+
+		<!-- ace scripts -->
+
+		{js href="/public/effect/assets/js/ace-elements.min.js"}
+		{js href="/public/effect/assets/js/ace.min.js"}
+
+		<!-- inline scripts related to this page -->
+
+		<script type="text/javascript">
+			jQuery(function($) {
+				$('.easy-pie-chart.percentage').each(function(){
+					var $box = $(this).closest('.infobox');
+					var barColor = $(this).data('color') || (!$box.hasClass('infobox-dark') ? $box.css('color') : 'rgba(255,255,255,0.95)');
+					var trackColor = barColor == 'rgba(255,255,255,0.95)' ? 'rgba(255,255,255,0.25)' : '#E2E2E2';
+					var size = parseInt($(this).data('size')) || 50;
+					$(this).easyPieChart({
+						barColor: barColor,
+						trackColor: trackColor,
+						scaleColor: false,
+						lineCap: 'butt',
+						lineWidth: parseInt(size/10),
+						animate: /msie\s*(8|7|6)/.test(navigator.userAgent.toLowerCase()) ? false : 1000,
+						size: size
+					});
+				})
+			
+				$('.sparkline').each(function(){
+					var $box = $(this).closest('.infobox');
+					var barColor = !$box.hasClass('infobox-dark') ? $box.css('color') : '#FFF';
+					$(this).sparkline('html', {tagValuesAttribute:'data-values', type: 'bar', barColor: barColor , chartRangeMin:$(this).data('min') || 0} );
+				});
+			
+			
+			
+			
+			  var placeholder = $('#piechart-placeholder').css({'width':'90%' , 'min-height':'150px'});
+			  
+			  var data = [
+				{ label: "男",  data: {$user_sex_m['m_percent']}, color: "#2091CF"},
+				{ label: "女",  data: {$user_sex_g['g_percent']}, color: "#DA5430"},
+				{ label: "未知",  data: {$user_sex_u['u_percent']}, color: "#AF4E96"},
+			  ]
+			  function drawPieChart(placeholder, data, position) {
+			 	  $.plot(placeholder, data, {
+					series: {
+						pie: {
+							show: true,
+							tilt:0.8,
+							highlight: {
+								opacity: 0.25
+							},
+							stroke: {
+								color: '#fff',
+								width: 2
+							},
+							startAngle: 2
+						}
+					},
+					legend: {
+						show: true,
+						position: position || "ne", 
+						labelBoxBorderColor: null,
+						margin:[-30,15]
+					}
+					,
+					grid: {
+						hoverable: true,
+						clickable: true
+					}
+				 })
+			 }
+			 drawPieChart(placeholder, data);
+			
+			 /**
+			 we saved the drawing function and the data to redraw with different position later when switching to RTL mode dynamically
+			 so that's not needed actually.
+			 */
+			 placeholder.data('chart', data);
+			 placeholder.data('draw', drawPieChart);
+			
+			
+			
+			  var $tooltip = $("<div class='tooltip top in'><div class='tooltip-inner'></div></div>").hide().appendTo('body');
+			  var previousPoint = null;
+			
+			  placeholder.on('plothover', function (event, pos, item) {
+				if(item) {
+					if (previousPoint != item.seriesIndex) {
+						previousPoint = item.seriesIndex;
+						var tip = item.series['label'] + " : " + item.series['percent']+'%';
+						$tooltip.show().children(0).text(tip);
+					}
+					$tooltip.css({top:pos.pageY + 10, left:pos.pageX + 10});
+				} else {
+					$tooltip.hide();
+					previousPoint = null;
+				}
+				
+			 });
+			
+			
+			
+			
+			
+			
+				var d1 = [];
+				for (var i = 0; i < Math.PI * 2; i += 0.5) {
+					d1.push([i, Math.sin(i)]);
+				}
+				var d2 = [];
+				for (var i = 0; i < Math.PI * 2; i += 0.5) {
+					d2.push([i, Math.cos(i)]);
+				}
+			
+				var d3 = [];
+				for (var i = 0; i < Math.PI * 2; i += 0.2) {
+					d3.push([i, Math.tan(i)]);
+				}
+				
+			
+				var sales_charts = $('#sales-charts').css({'width':'100%' , 'height':'220px'});
+				$.plot("#sales-charts", [
+					{ label: "Domains", data: d1 },
+					{ label: "Hosting", data: d2 },
+					{ label: "Services", data: d3 }
+				], {
+					hoverable: true,
+					shadowSize: 0,
+					series: {
+						lines: { show: true },
+						points: { show: true }
+					},
+					xaxis: {
+						tickLength: 0
+					},
+					yaxis: {
+						ticks: 10,
+						min: -2,
+						max: 2,
+						tickDecimals: 3
+					},
+					grid: {
+						backgroundColor: { colors: [ "#fff", "#fff" ] },
+						borderWidth: 1,
+						borderColor:'#555'
+					}
+				});
+			
+			
+				$('#recent-box [data-rel="tooltip"]').tooltip({placement: tooltip_placement});
+				function tooltip_placement(context, source) {
+					var $source = $(source);
+					var $parent = $source.closest('.tab-content')
+					var off1 = $parent.offset();
+					var w1 = $parent.width();
+			
+					var off2 = $source.offset();
+					var w2 = $source.width();
+			
+					if( parseInt(off2.left) < parseInt(off1.left) + parseInt(w1 / 2) ) return 'right';
+					return 'left';
+				}
+			
+			
+				$('.dialogs,.comments').slimScroll({
+					height: '300px'
+			    });
+				
+				
+				//Android's default browser somehow is confused when tapping on label which will lead to dragging the task
+				//so disable dragging when clicking on label
+				var agent = navigator.userAgent.toLowerCase();
+				if("ontouchstart" in document && /applewebkit/.test(agent) && /android/.test(agent))
+				  $('#tasks').on('touchstart', function(e){
+					var li = $(e.target).closest('#tasks li');
+					if(li.length == 0)return;
+					var label = li.find('label.inline').get(0);
+					if(label == e.target || $.contains(label, e.target)) e.stopImmediatePropagation() ;
+				});
+			
+				$('#tasks').sortable({
+					opacity:0.8,
+					revert:true,
+					forceHelperSize:true,
+					placeholder: 'draggable-placeholder',
+					forcePlaceholderSize:true,
+					tolerance:'pointer',
+					stop: function( event, ui ) {
+						$(ui.item).css('z-index', 'auto');
+					}
+				});
+				$('#tasks').disableSelection();
+				$('#tasks input:checkbox').removeAttr('checked').on('click', function(){
+					if(this.checked) $(this).closest('li').addClass('selected');
+					else $(this).closest('li').removeClass('selected');
+				});
+				
+			
+			})
+		</script>
+
