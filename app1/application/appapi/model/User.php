@@ -892,6 +892,15 @@ class User extends Model
 				$datas[$k]['actives_end']=$v['actives_end'];
 				$datas[$k]['actives_address']=$v['actives_address'];
 				$datas[$k]['actives_content']=$v['actives_content'];
+				$checkJoin=Db::table('ike_actives_join')
+							->where(['actives_id'=>$v['actives_id'],'tu_id'=>$data['userId']])
+							->select();
+				if($checkJoin)
+				{
+					$datas[$k]['status']=1;
+				}else{
+					$datas[$k]['status']=0;
+				}
 			}
 			return $datas;
 		}else{
